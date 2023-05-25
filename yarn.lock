@@ -1460,6 +1460,11 @@ executable@^4.1.0:
   dependencies:
     pify "^2.2.0"
 
+express-asyncify@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/express-asyncify/-/express-asyncify-1.1.0.tgz#3b3cc1788763f8aea3989443953bfc095ce55f9f"
+  integrity sha512-2FLCFa2AOmpo08r6pxJsKh9NxixSwnOH9zI8OxScJNQTPeMy6omjINqDWhY7htvJoatDN5mguXaVYUG/ayIQzg==
+
 express-winston@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/express-winston/-/express-winston-4.2.0.tgz#e9d535d52aa4c125a54a29cce132ae2e3633f4fa"
