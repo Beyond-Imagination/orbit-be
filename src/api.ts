@@ -6,7 +6,7 @@ import helmet from 'helmet'
 import {isProduction, NODE_ENV, PORT} from '@config'
 import { logger, loggerMiddleware } from '@utils/logger'
 import controllers from '@controllers'
-import middleware from '@middlewares'
+import middlewares from '@middlewares'
 
 export class API {
     app: express.Application
@@ -26,6 +26,7 @@ export class API {
         this.app.use(express.urlencoded({ extended: true }))
         this.app.use(hpp())
         this.app.use(loggerMiddleware)
+        this.app.use(middlewares.space.classNameRouter)
     }
 
     setController() {
@@ -38,7 +39,7 @@ export class API {
     }
 
     setPostMiddleware() {
-        this.app.use(middleware.error)
+        this.app.use(middlewares.error)
     }
 
     public listen() {
