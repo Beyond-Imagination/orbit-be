@@ -1,5 +1,5 @@
 import express from 'express'
-import asyncify from "express-asyncify";
+import asyncify from 'express-asyncify'
 
 const router = asyncify(express.Router())
 

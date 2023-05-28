@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { APIError } from '@/types/errors/error'
+import { APIError } from '@/types/errors'
 import { logger } from '@utils/logger'
 
 const errorMiddleware = (error: APIError, req: Request, res: Response, next: NextFunction) => {

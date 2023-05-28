@@ -12,7 +12,7 @@ export default class Scheduler {
     }
 
     private async publish() {
-        logger.info("run publisher")
+        logger.info('run publisher')
 
         // TODO: db 에서 현재 message 대상 목록을 가져와 queue 에 push
 

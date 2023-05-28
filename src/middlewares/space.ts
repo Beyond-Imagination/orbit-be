@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { InvalidClassName } from "@/types/errors/space";
+import { InvalidClassName } from '@/types/errors/space'
 
 const classNameRouter = (req: Request, res: Response, next: NextFunction) => {
     try {

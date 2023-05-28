@@ -1,11 +1,11 @@
 import express from 'express'
-import asyncify from "express-asyncify";
+import asyncify from 'express-asyncify'
 
-import {InternalServerError} from "@/types/errors";
+import { InternalServerError } from '@/types/errors'
 
 const router = asyncify(express.Router())
 
-router.get('/error', (req, res) => {
+router.get('/error', async (req, res) => {
     throw new InternalServerError()
 })
 

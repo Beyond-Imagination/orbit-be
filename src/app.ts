@@ -1,9 +1,8 @@
 import '@config'
 import connect from '@models/connector'
-import { API } from '@/api'
+import API from '@/api'
 import Messenger from '@/messenger'
 import Scheduler from '@/scheduler'
-
 ;(async () => {
     await connect()
     const api = new API()

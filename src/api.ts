@@ -3,12 +3,12 @@ import compression from 'compression'
 import hpp from 'hpp'
 import helmet from 'helmet'
 
-import {isProduction, NODE_ENV, PORT} from '@config'
+import { isProduction, NODE_ENV, PORT } from '@config'
 import { logger, loggerMiddleware } from '@utils/logger'
 import controllers from '@controllers'
 import middlewares from '@middlewares'
 
-export class API {
+export default class API {
     app: express.Application
 
     constructor() {
@@ -33,7 +33,7 @@ export class API {
         this.app.use('/v1/webhooks', controllers.v1.webhooks)
         this.app.use('/v1/commands', controllers.v1.commands)
         this.app.use('/v1/orbits', controllers.v1.orbit)
-        if(!isProduction()){
+        if (!isProduction()) {
             this.app.use('/dev', controllers.dev)
         }
     }
