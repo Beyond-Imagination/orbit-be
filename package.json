@@ -13,6 +13,7 @@
         "postinstall": "husky install"
     },
     "dependencies": {
+        "@typegoose/typegoose": "^11.2.0",
         "compression": "^1.7.4",
         "cross-env": "^7.0.3",
         "dotenv": "^16.0.3",
