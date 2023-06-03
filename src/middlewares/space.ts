@@ -12,34 +12,51 @@ export const classNameValidator = (className: string): RequestHandler => {
     }
 }
 
-const classNameRouter = (req: Request, res: Response, next: NextFunction) => {
-    try {
-        switch (req.body.className) {
-            case 'InitPayload':
-                req.url = '/v1/webhooks/install'
-                req.method = 'post'
-                break
-            case 'ChangeServerUrlPayload':
-                req.url = '/v1/webhooks/changeServerUrl'
-                req.method = 'put'
-                break
-            case 'ApplicationUninstalledPayload':
-                req.url = '/v1/webhooks/uninstall'
-                req.method = 'delete'
-                break
-            case 'ListCommandsPayload':
-                req.url = '/v1/commands'
-                req.method = 'get'
-                break
-            default:
-                throw new InvalidClassName()
-        }
-        next()
-    } catch (e) {
-        next(e)
+export const classNameRouter = (req: Request, res: Response, next: NextFunction) => {
+    switch (req.body.className) {
+        case 'InitPayload':
+            req.url = '/v1/webhooks/install'
+            req.method = 'post'
+            break
+        case 'ChangeServerUrlPayload':
+            req.url = '/v1/webhooks/changeServerUrl'
+            req.method = 'put'
+            break
+        case 'ApplicationUninstalledPayload':
+            req.url = '/v1/webhooks/uninstall'
+            req.method = 'delete'
+            break
+        case 'ListCommandsPayload':
+            req.url = '/v1/commands/list'
+            req.method = 'get'
+            break
+        case 'MessagePayload':
+            req.url = '/v1/commands'
+            req.method = 'post'
+            break
     }
+    next()
 }
 
-export default {
-    classNameRouter,
+export const commandRouter = (req, res, next) => {
+    const commands = req.body.message.body.text.split(' ')
+    switch (commands[0]) {
+        case 'add':
+            req.url = '/orbit'
+            req.method = 'post'
+            break
+        case 'list':
+            req.url = '/orbit'
+            req.method = 'get'
+            break
+        case 'update':
+            req.url = '/orbit'
+            req.method = 'put'
+            break
+        case 'delete':
+            req.url = '/orbit'
+            req.method = 'delete'
+            break
+    }
+    next()
 }

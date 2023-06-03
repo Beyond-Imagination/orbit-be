@@ -1,5 +1,5 @@
 import error from './error'
-import space from './space'
+import * as space from './space'
 
 export default {
     error,
