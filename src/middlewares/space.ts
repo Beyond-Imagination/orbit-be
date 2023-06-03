@@ -1,5 +1,16 @@
-import { NextFunction, Request, Response } from 'express'
-import { InvalidClassName } from '@/types/errors/space'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
+
+import { InvalidClassName } from '@/types/errors'
+
+export const classNameValidator = (className: string): RequestHandler => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        if (className === req.body.className) {
+            next()
+        } else {
+            next(new InvalidClassName())
+        }
+    }
+}
 
 const classNameRouter = (req: Request, res: Response, next: NextFunction) => {
     try {

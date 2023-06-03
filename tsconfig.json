@@ -23,6 +23,7 @@
         "paths": {
             "@/*": ["*"],
             "@config": ["config"],
+            "@types": ["types"],
             "@controllers": ["controllers"],
             "@exceptions/*": ["exceptions/*"],
             "@middlewares": ["middlewares"],
