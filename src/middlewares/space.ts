@@ -39,6 +39,7 @@ export const classNameRouter = (req: Request, res: Response, next: NextFunction)
             req.method = 'post'
             break
     }
+    res.meta.path = req.url
     next()
 }
 
@@ -62,6 +63,7 @@ export const commandRouter = (req, res, next) => {
             req.method = 'delete'
             break
     }
+    res.meta.path += req.url
     next()
 }
 

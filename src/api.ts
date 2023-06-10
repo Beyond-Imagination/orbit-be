@@ -25,6 +25,7 @@ export default class API {
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
         this.app.use(hpp())
+        this.app.use(middlewares.request.requestId)
         this.app.use(loggerMiddleware)
         this.app.use(middlewares.space.classNameRouter)
     }

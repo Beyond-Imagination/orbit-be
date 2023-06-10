@@ -4,7 +4,7 @@ import { logger } from '@utils/logger'
 
 const errorMiddleware = (error: APIError, req: Request, res: Response, next: NextFunction) => {
     try {
-        res.error = error
+        res.meta.error = error
         res.status(error.statusCode).json({ message: error.message, code: error.errorCode })
     } catch (err) {
         logger.error('fail in error middleware', { original: error, new: err })

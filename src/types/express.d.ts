@@ -11,7 +11,11 @@ declare global {
             bearerToken: string
         }
         interface Response {
-            error: Error
+            meta: {
+                requestId: string
+                path?: string
+                error?: Error
+            }
         }
     }
 }
