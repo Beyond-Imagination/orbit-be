@@ -4,14 +4,15 @@ const data: installInfo = {
     version: '0.1.0',
     uiExtension: {
         contextIdentifier: 'global',
-        extension: [
+        extensions: [
             {
                 className: 'ChatBotUiExtensionIn',
             },
         ],
     },
     right: {
-        codes: ['Channel.PostMessages'],
+        contextIdentifier: 'global',
+        rightCodes: ['Channel.PostMessages'],
     },
 }
 

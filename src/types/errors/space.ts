@@ -7,3 +7,19 @@ export class InvalidClassName extends APIError {
         Error.captureStackTrace(this, InvalidClassName)
     }
 }
+
+export class ErrorSetUiExtension extends APIError {
+    constructor(cause: Error | string = null) {
+        super(500, 710, 'error set ui extension', cause)
+        Object.setPrototypeOf(this, ErrorSetUiExtension.prototype)
+        Error.captureStackTrace(this, ErrorSetUiExtension)
+    }
+}
+
+export class ErrorRequestRights extends APIError {
+    constructor(cause: Error | string = null) {
+        super(500, 711, 'error request rights', cause)
+        Object.setPrototypeOf(this, ErrorRequestRights.prototype)
+        Error.captureStackTrace(this, ErrorRequestRights)
+    }
+}

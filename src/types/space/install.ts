@@ -1,6 +1,6 @@
 export interface uiExtension {
     contextIdentifier: string
-    extension: {
+    extensions: {
         className: string
         displayName?: string
         uniqueCode?: string
@@ -9,5 +9,6 @@ export interface uiExtension {
 }
 
 export interface right {
-    codes: string[]
+    contextIdentifier: string
+    rightCodes: string[]
 }

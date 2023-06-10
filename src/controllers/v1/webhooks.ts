@@ -4,7 +4,8 @@ import asyncify from 'express-asyncify'
 import { ApplicationUninstalledPayload, ChangeServerUrlPayload, InitPayload } from '@/types/space'
 import middlewares from '@middlewares'
 import { OrganizationModel } from '@/models'
-import { VERSION } from '@config'
+import { install } from '@services/space'
+import { getInstallInfo } from '@utils/version'
 
 const router = asyncify(express.Router())
 
@@ -13,12 +14,14 @@ router.use(middlewares.space.verifySpaceRequest)
 router.post('/install', async (req, res) => {
     const body = req.body as InitPayload
     // TODO call space api for ui extension and rights
+    const installInfo = getInstallInfo()
+    await install(req.organizationSecret, req.bearerToken, installInfo)
     await OrganizationModel.create({
         clientId: body.clientId,
         clientSecret: body.clientSecret,
         serverUrl: body.serverUrl,
         admin: [body.userId],
-        version: VERSION,
+        version: installInfo.version,
     })
     res.status(204).send()
 })
