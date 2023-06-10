@@ -9,8 +9,8 @@ export class BadRequest extends APIError {
 }
 
 export class Unauthorized extends APIError {
-    constructor() {
-        super(401, 401, 'unauthorized')
+    constructor(cause: Error | string = null) {
+        super(401, 401, 'unauthorized', cause)
         Object.setPrototypeOf(this, Unauthorized.prototype)
         Error.captureStackTrace(this, Unauthorized)
     }

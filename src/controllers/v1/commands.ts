@@ -5,6 +5,8 @@ import middlewares from '@middlewares'
 
 const router = asyncify(express.Router())
 
+router.use(middlewares.space.verifySpaceRequest)
+
 router.get('/list', async (req, res) => {
     // TODO response command list
     res.status(200).json({ path: '/v1/commands/list' })

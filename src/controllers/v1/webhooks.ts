@@ -2,14 +2,13 @@ import express from 'express'
 import asyncify from 'express-asyncify'
 
 import { ApplicationUninstalledPayload, ChangeServerUrlPayload, InitPayload } from '@/types/space'
+import middlewares from '@middlewares'
 import { OrganizationModel } from '@/models'
 import { VERSION } from '@config'
 
 const router = asyncify(express.Router())
 
-router.get('/', (req, res) => {
-    res.status(200).json({ path: 'webhooks' })
-})
+router.use(middlewares.space.verifySpaceRequest)
 
 router.post('/install', async (req, res) => {
     const body = req.body as InitPayload
