@@ -18,3 +18,13 @@ export interface ApplicationUninstalledPayload {
     clientId: string
     serverUrl: string
 }
+
+export interface ListCommandsPayload {
+    className: string
+    accessToken: string
+    verificationToken: string
+    userId: string
+    serverUrl: string
+    clientId: string
+    orgId: string
+}

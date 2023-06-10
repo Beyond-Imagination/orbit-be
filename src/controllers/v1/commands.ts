@@ -2,14 +2,34 @@ import express from 'express'
 import asyncify from 'express-asyncify'
 
 import middlewares from '@middlewares'
+import { space } from '@/types'
 
 const router = asyncify(express.Router())
 
 router.use(middlewares.space.verifySpaceRequest)
 
 router.get('/list', async (req, res) => {
-    // TODO response command list
-    res.status(200).json({ path: '/v1/commands/list' })
+    const commands: space.Commands = {
+        commands: [
+            {
+                name: 'add',
+                description: 'add a new orbit message',
+            },
+            {
+                name: 'list',
+                description: 'show registered orbit messages',
+            },
+            {
+                name: 'update',
+                description: 'update an orbit message',
+            },
+            {
+                name: 'delete',
+                description: 'delete an orbit message',
+            },
+        ],
+    }
+    res.status(200).json(commands)
 })
 
 router.use(middlewares.space.commandRouter)
