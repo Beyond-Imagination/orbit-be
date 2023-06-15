@@ -1,0 +1,86 @@
+import { getMockReq, getMockRes } from '@jest-mock/express'
+
+import { addCommandValidator, addRegex } from '@/middlewares/commands'
+
+describe('addRegex', () => {
+    it('should parse valid command', () => {
+        const text = 'add test "* * * * *" "this is a test"'
+        const [command, channelName, cron, message, ...rest] = text.match(addRegex)
+        expect(command).toBe('add')
+        expect(channelName).toBe('test')
+        expect(cron).toBe('"* * * * *"')
+        expect(message).toBe('"this is a test"')
+        expect(rest).toHaveLength(0)
+    })
+
+    it('should parse undefined with incomplete command', () => {
+        const text = 'add'
+        const [command, channelName, cron, message, ...rest] = text.match(addRegex)
+        expect(command).toBe('add')
+        expect(channelName).toBeUndefined()
+        expect(cron).toBeUndefined()
+        expect(message).toBeUndefined()
+        expect(rest).toHaveLength(0)
+    })
+
+    it('should parse rest with too much command', () => {
+        const text = 'add test "* * * * *" "this is a test" with too much commands'
+        const [command, channelName, cron, message, ...rest] = text.match(addRegex)
+        expect(command).toBe('add')
+        expect(channelName).toBe('test')
+        expect(cron).toBe('"* * * * *"')
+        expect(message).toBe('"this is a test"')
+        expect(rest.length).toBeGreaterThan(0)
+    })
+})
+
+describe('addCommandValidator', () => {
+    it('should success with valid command', () => {
+        const req = getMockReq({ body: { message: { body: { text: 'add test "* * * * *" "this is a test"' } } } })
+        const { res, next } = getMockRes({})
+
+        addCommandValidator(req, res, next)
+        expect(req.command).toBeTruthy()
+        expect(next).toBeCalledTimes(1)
+    })
+
+    it('should send result without channel name', () => {
+        const req = getMockReq({ body: { message: { body: { text: 'add' } } } })
+        const { res, next } = getMockRes({})
+
+        addCommandValidator(req, res, next)
+        expect(req.command).toBeUndefined()
+        expect(next).toBeCalledTimes(0)
+        expect(res.sendStatus).toBeCalledWith(204)
+    })
+
+    it('should send result without cron', () => {
+        const req = getMockReq({ body: { message: { body: { text: 'add channelName' } } } })
+        const { res, next } = getMockRes({})
+
+        addCommandValidator(req, res, next)
+        expect(req.command).toBeUndefined()
+        expect(next).toBeCalledTimes(0)
+        expect(res.sendStatus).toBeCalledWith(204)
+    })
+
+    it('should send result without message', () => {
+        const req = getMockReq({ body: { message: { body: { text: 'add channelName "* * * * *"' } } } })
+        const { res, next } = getMockRes({})
+
+        addCommandValidator(req, res, next)
+        expect(req.command).toBeUndefined()
+        expect(next).toBeCalledTimes(0)
+        expect(res.sendStatus).toBeCalledWith(204)
+    })
+
+    it('should send result with too much command', () => {
+        const req = getMockReq({ body: { message: { body: { text: 'add channelName "* * * * *" "message" with too much command' } } } })
+        const { res, next } = getMockRes({})
+
+        addCommandValidator(req, res, next)
+        expect(req.command).toBeUndefined()
+        expect(next).toBeCalledTimes(0)
+        expect(res.sendStatus).toBeCalledWith(204)
+    })
+})

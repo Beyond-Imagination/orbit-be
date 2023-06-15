@@ -4,3 +4,9 @@ export interface Commands {
         description: string
     }[]
 }
+
+export interface AddCommandBody {
+    channelName: string
+    cron: string
+    message: string
+}

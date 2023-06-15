@@ -34,7 +34,7 @@ router.get('/list', async (req, res) => {
 
 router.use(middlewares.space.commandRouter)
 
-router.post('/orbit', async (req, res, next) => {
+router.post('/orbit', middlewares.commands.addCommandValidator, async (req, res, next) => {
     // TODO orbit add command
     res.status(200).json({ path: '/v1/commands/orbit', method: 'post' })
 })

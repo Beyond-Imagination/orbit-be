@@ -28,3 +28,22 @@ export interface ListCommandsPayload {
     clientId: string
     orgId: string
 }
+
+export interface MessagePayload {
+    className: 'MessagePayload'
+    message: {
+        messageId: string
+        channelId: string
+        messageData?: any
+        body: {
+            className: 'ChatMessage.Text'
+            text: string
+        }
+        attachments?: any
+        externalId?: any
+        createdTime: string
+    }
+    clientId: string
+    userId: string
+    verificationToken: any
+}
