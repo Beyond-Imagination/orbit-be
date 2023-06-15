@@ -62,6 +62,9 @@ export const commandRouter = (req, res, next) => {
             req.url = '/orbit'
             req.method = 'delete'
             break
+        default:
+            res.sendStatus(204)
+            return
     }
     res.meta.path += req.url
     next()
