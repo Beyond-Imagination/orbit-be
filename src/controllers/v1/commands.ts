@@ -39,6 +39,7 @@ router.use(middlewares.space.commandRouter)
 router.post('/orbit', middlewares.commands.addCommandValidator, async (req, res, next) => {
     const body = req.body as space.MessagePayload
     await OrbitModel.create({
+        organization: req.organization._id,
         clientId: body.clientId,
         channelId: req.command.channelName,
         message: req.command.message,

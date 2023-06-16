@@ -1,10 +1,13 @@
 import { DeleteResult } from 'mongodb'
+import mongoose from 'mongoose'
 import { getModelForClass, prop, ReturnModelType } from '@typegoose/typegoose'
 
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 import { OrganizationNotFoundException } from '@/types/errors'
 
 export class Organization extends TimeStamps {
+    public _id: mongoose.Types.ObjectId
+
     @prop({ required: true, unique: true })
     public clientId: string
 

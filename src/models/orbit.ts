@@ -1,9 +1,14 @@
-import { Types } from 'mongoose'
-import { getModelForClass, prop } from '@typegoose/typegoose'
+import mongoose from 'mongoose'
+import { getModelForClass, prop, Ref } from '@typegoose/typegoose'
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 
+import { Organization } from '@models/organization'
+
 export class Orbit extends TimeStamps {
-    public _id: Types.ObjectId
+    public _id: mongoose.Types.ObjectId
+
+    @prop({ ref: 'Organization' })
+    public organization: Ref<Organization>
 
     @prop({ required: true })
     public clientId: string
