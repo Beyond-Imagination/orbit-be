@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { getModelForClass, prop, Ref } from '@typegoose/typegoose'
+import { getModelForClass, prop, Ref, ReturnModelType } from '@typegoose/typegoose'
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 
 import { Organization } from '@models/organization'
@@ -27,6 +27,10 @@ export class Orbit extends TimeStamps {
 
     @prop({ index: true })
     public nextExecutionTime: Date
+
+    public static async findByClientId(this: ReturnModelType<typeof Orbit>, clientId: string): Promise<Orbit[]> {
+        return await this.find({ clientId }).exec()
+    }
 
     // nextExecutionTime 이 현재시간보다 과거인 애들 read
     public static findByExecutionTime() {
