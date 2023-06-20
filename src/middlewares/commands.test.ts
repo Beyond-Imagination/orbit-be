@@ -48,43 +48,63 @@ describe('addCommandValidator', () => {
         expect(next).toBeCalledTimes(1)
     })
 
-    it('should send result only with command', async () => {
-        const req = getMockReq({ body: { message: { body: { text: 'add' } } } })
-        const { res, next } = getMockRes({})
+    describe('command', () => {
+        it('should send result only with command', async () => {
+            const req = getMockReq({ body: { message: { body: { text: 'add' } } } })
+            const { res, next } = getMockRes({})
 
-        await addCommandValidator(req, res, next)
-        expect(req.command).toBeUndefined()
-        expect(next).toBeCalledTimes(0)
-        expect(res.sendStatus).toBeCalledWith(204)
+            await addCommandValidator(req, res, next)
+            expect(req.command).toBeUndefined()
+            expect(next).toBeCalledTimes(0)
+            expect(res.sendStatus).toBeCalledWith(204)
+        })
     })
 
-    it('should send result only with command and channelName', async () => {
-        const req = getMockReq({ body: { message: { body: { text: 'add channelName' } } } })
-        const { res, next } = getMockRes({})
+    describe('channel name', () => {
+        it('should send result only with command and channelName', async () => {
+            const req = getMockReq({ body: { message: { body: { text: 'add channelName' } } } })
+            const { res, next } = getMockRes({})
 
-        await addCommandValidator(req, res, next)
-        expect(req.command).toBeUndefined()
-        expect(next).toBeCalledTimes(0)
-        expect(res.sendStatus).toBeCalledWith(204)
+            await addCommandValidator(req, res, next)
+            expect(req.command).toBeUndefined()
+            expect(next).toBeCalledTimes(0)
+            expect(res.sendStatus).toBeCalledWith(204)
+        })
     })
 
-    it('should send result without message', async () => {
-        const req = getMockReq({ body: { message: { body: { text: 'add channelName "* * * * *"' } } } })
-        const { res, next } = getMockRes({})
+    describe('cron', () => {
+        it('should send result with invalid cron', async () => {
+            const req = getMockReq({ body: { message: { body: { text: 'add channelName "invalid cron" "message"' } } } })
+            const { res, next } = getMockRes({})
 
-        await addCommandValidator(req, res, next)
-        expect(req.command).toBeUndefined()
-        expect(next).toBeCalledTimes(0)
-        expect(res.sendStatus).toBeCalledWith(204)
+            await addCommandValidator(req, res, next)
+            expect(req.command).toBeUndefined()
+            expect(next).toBeCalledTimes(0)
+            expect(res.sendStatus).toBeCalledWith(204)
+        })
     })
 
-    it('should send result with too much command', async () => {
-        const req = getMockReq({ body: { message: { body: { text: 'add channelName "* * * * *" "message" with too much command' } } } })
-        const { res, next } = getMockRes({})
+    describe('message', () => {
+        it('should send result without message', async () => {
+            const req = getMockReq({ body: { message: { body: { text: 'add channelName "* * * * *"' } } } })
+            const { res, next } = getMockRes({})
 
-        await addCommandValidator(req, res, next)
-        expect(req.command).toBeUndefined()
-        expect(next).toBeCalledTimes(0)
-        expect(res.sendStatus).toBeCalledWith(204)
+            await addCommandValidator(req, res, next)
+            expect(req.command).toBeUndefined()
+            expect(next).toBeCalledTimes(0)
+            expect(res.sendStatus).toBeCalledWith(204)
+        })
+    })
+
+    describe('rest', () => {
+        it('should send result with too much command', async () => {
+            const req = getMockReq({ body: { message: { body: { text: 'add channelName "* * * * *" "message" with too much command' } } } })
+            const { res, next } = getMockRes({})
+
+            await addCommandValidator(req, res, next)
+            expect(req.command).toBeUndefined()
+            expect(next).toBeCalledTimes(0)
+            expect(res.sendStatus).toBeCalledWith(204)
+        })
     })
 })

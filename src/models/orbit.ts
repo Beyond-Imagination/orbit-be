@@ -1,6 +1,8 @@
+import { UpdateResult } from 'mongodb'
 import mongoose from 'mongoose'
 import { getModelForClass, prop, Ref, ReturnModelType } from '@typegoose/typegoose'
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
+import cronParser from 'cron-parser'
 
 import { Organization } from '@models/organization'
 
@@ -38,8 +40,9 @@ export class Orbit extends TimeStamps {
     }
 
     // 현재 object 의 nextExecutionTime 업데이트
-    public updateNextExecutionTime() {
-        // TODO implement function
+    public async updateNextExecutionTime(): Promise<UpdateResult> {
+        const next = cronParser.parseExpression(this.cron).next()
+        return await OrbitModel.updateOne({ _id: this._id }, { nextExecutionTime: next }).exec()
     }
 
     // _id 로 삭제

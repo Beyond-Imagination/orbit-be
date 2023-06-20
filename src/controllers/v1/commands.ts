@@ -1,5 +1,6 @@
 import express from 'express'
 import asyncify from 'express-asyncify'
+import cronParser from 'cron-parser'
 
 import middlewares from '@middlewares'
 import { space } from '@/types'
@@ -45,7 +46,7 @@ router.post('/orbit', middlewares.commands.addCommandValidator, async (req, res,
         message: req.command.message,
         cron: req.command.cron,
         authorId: body.userId,
-        nextExecutionTime: new Date(), // TODO calculate next execution time
+        nextExecutionTime: cronParser.parseExpression(req.command.cron).next(),
     })
     await sendAddSuccessMessage(req.organization, req.bearerToken, body.userId)
     res.sendStatus(204)
