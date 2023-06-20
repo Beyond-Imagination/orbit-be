@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 
-import { Organization } from '@/models'
-import { ChatMessage } from '@types/space'
+import { Orbit, Organization } from '@/models'
+import { ChatMessage, MessageDivider, MessageSection } from '@types/space'
 import { logger } from '@utils/logger'
 
 async function sendMessage(organization: Organization, token: string, message: ChatMessage) {
@@ -39,9 +39,61 @@ export async function sendAddFailMessage(organization: Organization, token: stri
     await sendTextMessage(organization, token, userId, 'fail to add a new orbit message. check your command')
 }
 
-export async function sendOrbitListMessage(organization: Organization, token: string, userId: string) {
-    // todo: implement orbit list message
-    await sendTextMessage(organization, token, userId, 'orbit list')
+export async function sendOrbitListMessage(organization: Organization, token: string, userId: string, orbits: Orbit[]) {
+    const sections = orbits.map<MessageSection | MessageDivider>(orbit => ({
+        className: 'MessageSection',
+        elements: [
+            {
+                className: 'MessageFields',
+                fields: [
+                    {
+                        className: 'MessageField',
+                        first: 'Channel Name',
+                        second: orbit.channelId,
+                    },
+                    {
+                        className: 'MessageField',
+                        first: 'cron',
+                        second: `\`${orbit.cron}\``,
+                    },
+                    {
+                        className: 'MessageField',
+                        first: 'message',
+                        second: orbit.message,
+                    },
+                    {
+                        className: 'MessageField',
+                        first: 'created at',
+                        second: orbit.createdAt.toUTCString(),
+                    },
+                ],
+            },
+            {
+                className: 'MessageControlGroup',
+                elements: [
+                    {
+                        className: 'MessageButton',
+                        text: 'delete',
+                        style: 'DANGER',
+                        action: {
+                            className: 'PostMessageAction',
+                            actionId: 'delete',
+                            payload: orbit._id.toString(),
+                        },
+                    },
+                ],
+            },
+        ],
+    }))
+
+    const message: ChatMessage = {
+        channel: `member:id:${userId}`,
+        content: {
+            className: 'ChatMessage.Block',
+            sections: sections,
+        },
+    }
+    await sendMessage(organization, token, message)
 }
 
 export async function sendDeleteSuccessMessage(organization: Organization, token: string, userId: string) {

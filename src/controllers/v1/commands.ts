@@ -5,7 +5,7 @@ import cronParser from 'cron-parser'
 import middlewares from '@middlewares'
 import { space } from '@/types'
 import { OrbitModel } from '@/models'
-import { sendAddSuccessMessage } from '@services/space'
+import { sendAddSuccessMessage, sendOrbitListMessage } from '@services/space'
 
 const router = asyncify(express.Router())
 
@@ -53,8 +53,11 @@ router.post('/orbit', middlewares.commands.addCommandValidator, async (req, res,
 })
 
 router.get('/orbit', async (req, res, next) => {
-    // TODO orbit list command
-    res.status(200).json({ path: '/v1/commands/orbit', method: 'get' })
+    const body = req.body as space.MessagePayload
+    const orbits = await OrbitModel.findByClientId(req.organization.clientId)
+    // TODO send different message when orbits is empty array
+    await sendOrbitListMessage(req.organization, req.bearerToken, body.userId, orbits)
+    res.sendStatus(204)
 })
 
 router.put('/orbit', async (req, res, next) => {
