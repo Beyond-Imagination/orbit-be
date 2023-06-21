@@ -35,38 +35,31 @@ export const classNameRouter = (req: Request, res: Response, next: NextFunction)
             req.method = 'get'
             break
         case 'MessagePayload':
-            req.url = '/v1/commands'
-            req.method = 'post'
             break
     }
     res.meta.path = req.url
     next()
 }
 
-export const commandRouter = (req, res, next) => {
-    const commands = req.body.message.body.text.split(' ')
-    switch (commands[0]) {
-        case 'add':
-            req.url = '/orbit'
-            req.method = 'post'
-            break
-        case 'list':
-            req.url = '/orbit'
-            req.method = 'get'
-            break
-        case 'update':
-            req.url = '/orbit'
-            req.method = 'put'
-            break
-        case 'delete':
-            req.url = '/orbit'
-            req.method = 'delete'
-            break
-        default:
-            res.sendStatus(204)
-            return
+export const messageCommandRouter = (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.className === 'MessagePayload') {
+        const commands = req.body.message.body.text.split(' ')
+        switch (commands[0]) {
+            case 'add':
+                req.url = '/v1/commands/orbit'
+                req.method = 'post'
+                break
+            case 'list':
+                req.url = '/v1/commands/orbit'
+                req.method = 'get'
+                break
+            default:
+                // TODO send invalid command message
+                res.sendStatus(204)
+                return
+        }
+        res.meta.path = req.url
     }
-    res.meta.path += req.url
     next()
 }
 

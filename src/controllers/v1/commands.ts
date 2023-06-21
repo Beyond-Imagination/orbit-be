@@ -35,8 +35,6 @@ router.get('/list', async (req, res) => {
     res.status(200).json(commands)
 })
 
-router.use(middlewares.space.commandRouter)
-
 router.post('/orbit', middlewares.commands.addCommandValidator, async (req, res, next) => {
     const body = req.body as space.MessagePayload
     await OrbitModel.create({
