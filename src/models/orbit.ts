@@ -35,8 +35,10 @@ export class Orbit extends TimeStamps {
     }
 
     // nextExecutionTime 이 현재시간보다 과거인 애들 read
-    public static findByExecutionTime() {
-        // TODO implement function
+    public static async findByExecutionTime(this: ReturnModelType<typeof Orbit>, executionTime: Date = new Date()): Promise<Orbit[]> {
+        return this.find({ nextExecutionTime: { $lte: executionTime } })
+            .populate('organization')
+            .exec()
     }
 
     // 현재 object 의 nextExecutionTime 업데이트

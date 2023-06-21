@@ -3,6 +3,7 @@ import schedule from 'node-schedule'
 
 import Messenger from '@/messenger'
 import { logger } from '@utils/logger'
+import { OrbitModel } from '@/models'
 
 export default class Scheduler {
     queue: queueAsPromised
@@ -14,12 +15,10 @@ export default class Scheduler {
     private async publish() {
         logger.info('run publisher')
 
-        // TODO: db 에서 현재 message 대상 목록을 가져와 queue 에 push
-
-        // 임시 코드
-        for (let i = 0; i < 5; i++) {
-            this.queue.push(i)
-        }
+        const targetList = await OrbitModel.findByExecutionTime()
+        targetList.forEach(target => {
+            this.queue.push(target)
+        })
     }
 
     public run() {
