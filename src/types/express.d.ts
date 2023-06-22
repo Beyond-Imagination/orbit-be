@@ -4,8 +4,8 @@ import { AddCommandBody, OrganizationSecret } from '@types/space'
 declare global {
     namespace Express {
         interface Request {
-            _routeWhitelists: string[]
-            _routeBlacklists: string[]
+            _routeWhitelists: { body: string[] }
+            _routeBlacklists: { body: string[] }
             organization: Organization
             organizationSecret: OrganizationSecret
             bearerToken: string

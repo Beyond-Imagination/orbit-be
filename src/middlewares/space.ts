@@ -36,6 +36,8 @@ export const classNameRouter = (req: Request, res: Response, next: NextFunction)
             break
         case 'MessagePayload':
             break
+        case 'MessageActionPayload':
+            break
     }
     res.meta.path = req.url
     next()
@@ -56,6 +58,22 @@ export const messageCommandRouter = (req: Request, res: Response, next: NextFunc
             default:
                 // TODO send invalid command message
                 res.sendStatus(204)
+                return
+        }
+        res.meta.path = req.url
+    }
+    next()
+}
+
+export function actionRouter(req: Request, res: Response, next: NextFunction) {
+    if (req.body.className === 'MessageActionPayload') {
+        switch (req.body.actionId) {
+            case 'delete':
+                req.url = '/v1/commands/orbit'
+                req.method = 'delete'
+                break
+            default:
+                res.sendStatus(500)
                 return
         }
         res.meta.path = req.url

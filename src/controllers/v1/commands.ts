@@ -1,11 +1,11 @@
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import asyncify from 'express-asyncify'
 import cronParser from 'cron-parser'
 
 import middlewares from '@middlewares'
 import { space } from '@/types'
 import { OrbitModel } from '@/models'
-import { sendAddSuccessMessage, sendOrbitListMessage } from '@services/space'
+import { sendAddSuccessMessage, sendDeleteSuccessMessage, sendOrbitListMessage } from '@services/space'
 
 const router = asyncify(express.Router())
 
@@ -63,9 +63,18 @@ router.put('/orbit', async (req, res, next) => {
     res.status(200).json({ path: '/v1/commands/orbit', method: 'put' })
 })
 
-router.delete('/orbit', async (req, res, next) => {
-    // TODO orbit delete command
-    res.status(200).json({ path: '/v1/commands/orbit', method: 'delete' })
-})
+router.delete(
+    '/orbit',
+    (req: Request, res: Response, next: NextFunction) => {
+        req._routeBlacklists.body = ['message']
+        next()
+    },
+    async (req: Request, res: Response, next: NextFunction) => {
+        const body = req.body as space.MessageActionPayload
+        await OrbitModel.deleteById(body.actionValue)
+        await sendDeleteSuccessMessage(req.organization, req.bearerToken, body.userId)
+        res.sendStatus(204)
+    },
+)
 
 export default router

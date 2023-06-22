@@ -1,4 +1,4 @@
-import { UpdateResult } from 'mongodb'
+import { DeleteResult, UpdateResult } from 'mongodb'
 import mongoose from 'mongoose'
 import { getModelForClass, prop, Ref, ReturnModelType } from '@typegoose/typegoose'
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
@@ -48,8 +48,8 @@ export class Orbit extends TimeStamps {
     }
 
     // _id 로 삭제
-    public static deleteById() {
-        // TODO implement function
+    public static async deleteById(this: ReturnModelType<typeof Orbit>, id: string): Promise<DeleteResult> {
+        return this.deleteOne({ _id: id })
     }
 }
 

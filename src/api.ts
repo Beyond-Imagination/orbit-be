@@ -29,6 +29,7 @@ export default class API {
         this.app.use(loggerMiddleware)
         this.app.use(middlewares.space.classNameRouter)
         this.app.use(middlewares.space.messageCommandRouter)
+        this.app.use(middlewares.space.actionRouter)
     }
 
     setController() {

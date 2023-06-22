@@ -47,3 +47,12 @@ export interface MessagePayload {
     userId: string
     verificationToken: any
 }
+
+export interface MessageActionPayload {
+    className: 'MessageActionPayload'
+    actionId: string
+    actionValue: string
+    clientId: string
+    userId: string
+    message: any
+}
