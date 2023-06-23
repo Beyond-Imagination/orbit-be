@@ -40,7 +40,7 @@ router.post('/orbit', middlewares.commands.addCommandValidator, async (req, res,
     await OrbitModel.create({
         organization: req.organization._id,
         clientId: body.clientId,
-        channelId: req.command.channelName,
+        channelName: req.command.channelName,
         message: req.command.message,
         cron: req.command.cron,
         authorId: body.userId,

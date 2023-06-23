@@ -16,7 +16,7 @@ export class Orbit extends TimeStamps {
     public clientId: string
 
     @prop({ required: true })
-    public channelId: string
+    public channelName: string
 
     @prop({ required: true })
     public message: string

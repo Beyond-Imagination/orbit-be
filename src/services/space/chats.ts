@@ -49,7 +49,7 @@ export async function sendOrbitListMessage(organization: Organization, token: st
                     {
                         className: 'MessageField',
                         first: 'Channel Name',
-                        second: orbit.channelId,
+                        second: orbit.channelName,
                     },
                     {
                         className: 'MessageField',
@@ -102,4 +102,15 @@ export async function sendDeleteSuccessMessage(organization: Organization, token
 
 export async function sendDeleteFailMessage(organization: Organization, token: string, userId: string) {
     await sendTextMessage(organization, token, userId, 'fail to delete the orbit message')
+}
+
+export async function sendChannelMessage(organization: Organization, token: string, channelName: string, text: string) {
+    const message: ChatMessage = {
+        channel: `channel:name:${channelName}`,
+        content: {
+            className: 'ChatMessage.Text',
+            text: text,
+        },
+    }
+    await sendMessage(organization, token, message)
 }
