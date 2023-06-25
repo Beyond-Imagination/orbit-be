@@ -15,7 +15,7 @@ router.post('/install', async (req, res) => {
     const body = req.body as InitPayload
     // TODO call space api for ui extension and rights
     const installInfo = getInstallInfo()
-    await install(req.organizationSecret, req.bearerToken, installInfo)
+    await install(req.organizationSecret, installInfo)
     await OrganizationModel.create({
         clientId: body.clientId,
         clientSecret: body.clientSecret,

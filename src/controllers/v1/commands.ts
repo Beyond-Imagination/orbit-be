@@ -38,7 +38,7 @@ router.post('/orbit', middlewares.commands.addCommandValidator, async (req, res,
         authorId: body.userId,
         nextExecutionTime: cronParser.parseExpression(req.command.cron).next(),
     })
-    await sendAddSuccessMessage(req.organization, req.bearerToken, body.userId)
+    await sendAddSuccessMessage(req.organization, body.userId)
     res.sendStatus(204)
 })
 
@@ -46,7 +46,7 @@ router.get('/orbit', async (req, res, next) => {
     const body = req.body as space.MessagePayload
     const orbits = await OrbitModel.findByClientId(req.organization.clientId)
     // TODO send different message when orbits is empty array
-    await sendOrbitListMessage(req.organization, req.bearerToken, body.userId, orbits)
+    await sendOrbitListMessage(req.organization, body.userId, orbits)
     res.sendStatus(204)
 })
 
@@ -60,9 +60,9 @@ router.delete(
         const body = req.body as space.MessageActionPayload
         const result = await OrbitModel.deleteById(body.actionValue)
         if (result.deletedCount > 0) {
-            await sendDeleteSuccessMessage(req.organization, req.bearerToken, body.userId)
+            await sendDeleteSuccessMessage(req.organization, body.userId)
         } else {
-            await sendDeleteFailMessage(req.organization, req.bearerToken, body.userId)
+            await sendDeleteFailMessage(req.organization, body.userId)
         }
         res.sendStatus(204)
     },

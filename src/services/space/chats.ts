@@ -4,12 +4,12 @@ import { Orbit, Organization } from '@/models'
 import { ChatMessage, MessageDivider, MessageSection } from '@types/space'
 import { logger } from '@utils/logger'
 
-async function sendMessage(organization: Organization, token: string, message: ChatMessage) {
+async function sendMessage(organization: Organization, message: ChatMessage) {
     const url = `${organization.serverUrl}/api/http/chats/messages/send-message`
     const response = await fetch(url, {
         method: 'POST',
         headers: {
-            Authorization: token,
+            Authorization: await organization.getBearerToken(),
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
@@ -20,7 +20,7 @@ async function sendMessage(organization: Organization, token: string, message: C
     }
 }
 
-export async function sendTextMessage(organization: Organization, token: string, userId: string, text: string) {
+export async function sendTextMessage(organization: Organization, userId: string, text: string) {
     const message: ChatMessage = {
         channel: `member:id:${userId}`,
         content: {
@@ -28,18 +28,18 @@ export async function sendTextMessage(organization: Organization, token: string,
             text: text,
         },
     }
-    await sendMessage(organization, token, message)
+    await sendMessage(organization, message)
 }
 
-export async function sendAddSuccessMessage(organization: Organization, token: string, userId: string) {
-    await sendTextMessage(organization, token, userId, 'a new orbit message added')
+export async function sendAddSuccessMessage(organization: Organization, userId: string) {
+    await sendTextMessage(organization, userId, 'a new orbit message added')
 }
 
-export async function sendAddFailMessage(organization: Organization, token: string, userId: string) {
-    await sendTextMessage(organization, token, userId, 'fail to add a new orbit message. check your command')
+export async function sendAddFailMessage(organization: Organization, userId: string) {
+    await sendTextMessage(organization, userId, 'fail to add a new orbit message. check your command')
 }
 
-export async function sendOrbitListMessage(organization: Organization, token: string, userId: string, orbits: Orbit[]) {
+export async function sendOrbitListMessage(organization: Organization, userId: string, orbits: Orbit[]) {
     const sections = orbits.map<MessageSection | MessageDivider>(orbit => ({
         className: 'MessageSection',
         elements: [
@@ -93,18 +93,18 @@ export async function sendOrbitListMessage(organization: Organization, token: st
             sections: sections,
         },
     }
-    await sendMessage(organization, token, message)
+    await sendMessage(organization, message)
 }
 
-export async function sendDeleteSuccessMessage(organization: Organization, token: string, userId: string) {
-    await sendTextMessage(organization, token, userId, 'the orbit message deleted')
+export async function sendDeleteSuccessMessage(organization: Organization, userId: string) {
+    await sendTextMessage(organization, userId, 'the orbit message deleted')
 }
 
-export async function sendDeleteFailMessage(organization: Organization, token: string, userId: string) {
-    await sendTextMessage(organization, token, userId, 'fail to delete the orbit message')
+export async function sendDeleteFailMessage(organization: Organization, userId: string) {
+    await sendTextMessage(organization, userId, 'fail to delete the orbit message')
 }
 
-export async function sendChannelMessage(organization: Organization, token: string, channelName: string, text: string) {
+export async function sendChannelMessage(organization: Organization, channelName: string, text: string) {
     const message: ChatMessage = {
         channel: `channel:name:${channelName}`,
         content: {
@@ -112,5 +112,5 @@ export async function sendChannelMessage(organization: Organization, token: stri
             text: text,
         },
     }
-    await sendMessage(organization, token, message)
+    await sendMessage(organization, message)
 }

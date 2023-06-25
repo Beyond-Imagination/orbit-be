@@ -1,9 +1,9 @@
 import fetch from 'node-fetch'
 
-import { AccessToken, OrganizationSecret, PublicKeys } from '@types/space'
+import { AccessToken, IOrganizationSecret, PublicKeys } from '@types/space'
 import { Unauthorized } from '@types/errors'
 
-export async function getAccessToken(secret: OrganizationSecret): Promise<AccessToken> {
+export async function getAccessToken(secret: IOrganizationSecret): Promise<AccessToken> {
     const url = `${secret.serverUrl}/oauth/token`
     const token = Buffer.from(`${secret.clientId}:${secret.clientSecret}`).toString('base64')
 
@@ -25,7 +25,12 @@ export async function getAccessToken(secret: OrganizationSecret): Promise<Access
     return (await response.json()) as AccessToken
 }
 
-export async function getPublicKeys(secret: OrganizationSecret, token: string): Promise<PublicKeys> {
+export async function getBearerToken(secret: IOrganizationSecret): Promise<string> {
+    const result = await getAccessToken(secret)
+    return `Bearer ${result.access_token}`
+}
+
+export async function getPublicKeys(secret: IOrganizationSecret, token: string): Promise<PublicKeys> {
     const url = `${secret.serverUrl}/api/http/applications/clientId:${secret.clientId}/public-keys`
     const response = await fetch(url, {
         method: 'GET',

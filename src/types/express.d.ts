@@ -1,5 +1,5 @@
 import { Organization } from '@/models'
-import { AddCommandBody, OrganizationSecret } from '@types/space'
+import { AddCommandBody, IOrganizationSecret } from '@types/space'
 
 declare global {
     namespace Express {
@@ -7,8 +7,7 @@ declare global {
             _routeWhitelists: { body: string[] }
             _routeBlacklists: { body: string[] }
             organization: Organization
-            organizationSecret: OrganizationSecret
-            bearerToken: string
+            organizationSecret: IOrganizationSecret
             command: AddCommandBody
         }
         interface Response {

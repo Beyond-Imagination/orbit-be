@@ -1,11 +1,29 @@
 import { DeleteResult } from 'mongodb'
 import mongoose from 'mongoose'
 import { getModelForClass, prop, ReturnModelType } from '@typegoose/typegoose'
-
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
-import { OrganizationNotFoundException } from '@/types/errors'
 
-export class Organization extends TimeStamps {
+import { OrganizationNotFoundException } from '@/types/errors'
+import { IOrganizationSecret } from '@types/space'
+import { getBearerToken } from '@services/space'
+
+export class OrganizationSecret implements IOrganizationSecret {
+    clientId: string
+    clientSecret: string
+    serverUrl: string
+
+    constructor(clientId: string, clientSecret: string, serverUrl: string) {
+        this.clientId = clientId
+        this.clientSecret = clientSecret
+        this.serverUrl = serverUrl
+    }
+
+    public async getBearerToken(): Promise<string> {
+        return getBearerToken(this)
+    }
+}
+
+export class Organization extends TimeStamps implements IOrganizationSecret {
     public _id: mongoose.Types.ObjectId
 
     @prop({ required: true, unique: true })
@@ -49,6 +67,10 @@ export class Organization extends TimeStamps {
 
     public static async updateServerUrlByClientId(this: ReturnModelType<typeof Organization>, clientId: string, newServerUrl: string): Promise<void> {
         await this.findOneAndUpdate({ clientId: clientId }, { serverUrl: newServerUrl })
+    }
+
+    public async getBearerToken(): Promise<string> {
+        return getBearerToken(this)
     }
 }
 

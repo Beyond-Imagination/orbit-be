@@ -11,38 +11,38 @@ export async function addCommandValidator(req: Request, res: Response, next: Nex
     let [command, channelName, cron, message, ...rest] = body.message.body.text.match(addRegex) // eslint-disable-line
 
     if (rest.length) {
-        await sendAddFailMessage(req.organization, req.bearerToken, body.userId)
+        await sendAddFailMessage(req.organization, body.userId)
         return res.sendStatus(204)
     }
 
     if (!message) {
-        await sendAddFailMessage(req.organization, req.bearerToken, body.userId)
+        await sendAddFailMessage(req.organization, body.userId)
         return res.sendStatus(204)
     } else {
         message = message.slice(1, -1)
     }
 
     if (!cron) {
-        await sendAddFailMessage(req.organization, req.bearerToken, body.userId)
+        await sendAddFailMessage(req.organization, body.userId)
         return res.sendStatus(204)
     } else {
         try {
             cron = cron.slice(1, -1)
             cronParser.parseExpression(cron)
         } catch (e) {
-            await sendAddFailMessage(req.organization, req.bearerToken, body.userId)
+            await sendAddFailMessage(req.organization, body.userId)
             return res.sendStatus(204)
         }
     }
 
     if (!channelName) {
         // todo: check if channelName exist
-        await sendAddFailMessage(req.organization, req.bearerToken, body.userId)
+        await sendAddFailMessage(req.organization, body.userId)
         return res.sendStatus(204)
     }
 
     if (command !== 'add') {
-        await sendAddFailMessage(req.organization, req.bearerToken, body.userId)
+        await sendAddFailMessage(req.organization, body.userId)
         return res.sendStatus(204)
     }
 

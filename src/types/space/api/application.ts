@@ -1,9 +1,10 @@
 import { RSA } from 'jwk-to-pem'
 
-export interface OrganizationSecret {
+export interface IOrganizationSecret {
     clientId: string
     clientSecret: string
     serverUrl: string
+    getBearerToken(): Promise<string>
 }
 
 export interface AccessToken {
