@@ -11,8 +11,10 @@ import middlewares from '@middlewares'
 export default class API {
     app: express.Application
 
-    constructor() {
+    constructor(newrelic: any) {
         this.app = express()
+
+        this.app.locals.newrelic = newrelic
 
         this.setPreMiddleware()
         this.setController()
