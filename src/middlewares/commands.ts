@@ -18,6 +18,8 @@ export async function addCommandValidator(req: Request, res: Response, next: Nex
     if (!message) {
         await sendAddFailMessage(req.organization, req.bearerToken, body.userId)
         return res.sendStatus(204)
+    } else {
+        message = message.slice(1, -1)
     }
 
     if (!cron) {
