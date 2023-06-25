@@ -22,14 +22,6 @@ router.get('/list', async (req, res) => {
                 name: 'list',
                 description: 'show registered orbit messages',
             },
-            {
-                name: 'update',
-                description: 'update an orbit message',
-            },
-            {
-                name: 'delete',
-                description: 'delete an orbit message',
-            },
         ],
     }
     res.status(200).json(commands)
@@ -56,11 +48,6 @@ router.get('/orbit', async (req, res, next) => {
     // TODO send different message when orbits is empty array
     await sendOrbitListMessage(req.organization, req.bearerToken, body.userId, orbits)
     res.sendStatus(204)
-})
-
-router.put('/orbit', async (req, res, next) => {
-    // TODO orbit update command
-    res.status(200).json({ path: '/v1/commands/orbit', method: 'put' })
 })
 
 router.delete(
