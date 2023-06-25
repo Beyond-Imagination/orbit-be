@@ -12,7 +12,7 @@ export class Orbit extends TimeStamps {
     @prop({ ref: 'Organization' })
     public organization: Ref<Organization>
 
-    @prop({ required: true })
+    @prop({ required: true, index: true })
     public clientId: string
 
     @prop({ required: true })
