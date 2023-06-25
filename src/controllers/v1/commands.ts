@@ -5,7 +5,7 @@ import cronParser from 'cron-parser'
 import middlewares from '@middlewares'
 import { space } from '@/types'
 import { OrbitModel } from '@/models'
-import { sendAddSuccessMessage, sendDeleteSuccessMessage, sendOrbitListMessage } from '@services/space'
+import { sendAddSuccessMessage, sendDeleteFailMessage, sendDeleteSuccessMessage, sendOrbitListMessage } from '@services/space'
 
 const router = asyncify(express.Router())
 
@@ -58,8 +58,12 @@ router.delete(
     },
     async (req: Request, res: Response, next: NextFunction) => {
         const body = req.body as space.MessageActionPayload
-        await OrbitModel.deleteById(body.actionValue)
-        await sendDeleteSuccessMessage(req.organization, req.bearerToken, body.userId)
+        const result = await OrbitModel.deleteById(body.actionValue)
+        if (result.deletedCount > 0) {
+            await sendDeleteSuccessMessage(req.organization, req.bearerToken, body.userId)
+        } else {
+            await sendDeleteFailMessage(req.organization, req.bearerToken, body.userId)
+        }
         res.sendStatus(204)
     },
 )
