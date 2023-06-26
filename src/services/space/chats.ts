@@ -31,6 +31,48 @@ export async function sendTextMessage(organization: Organization, userId: string
     await sendMessage(organization, message)
 }
 
+export async function sendHelpMessage(organization: Organization, userId: string) {
+    const message: ChatMessage = {
+        channel: `member:id:${userId}`,
+        content: {
+            className: 'ChatMessage.Block',
+            sections: [
+                {
+                    className: 'MessageSection',
+                    elements: [
+                        {
+                            className: 'MessageText',
+                            content: 'add command help message',
+                            accessory: {
+                                className: 'MessageIcon',
+                                icon: {
+                                    icon: 'help',
+                                },
+                            },
+                        },
+                        {
+                            className: 'MessageFields',
+                            fields: [
+                                {
+                                    className: 'MessageField',
+                                    first: 'format',
+                                    second: 'add {channel_name} "{cron}" "{message}"',
+                                },
+                                {
+                                    className: 'MessageField',
+                                    first: 'example',
+                                    second: 'add my_channel "* * * * *" "welcome to orbit"',
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    }
+    await sendMessage(organization, message)
+}
+
 export async function sendAddSuccessMessage(organization: Organization, userId: string) {
     await sendTextMessage(organization, userId, 'a new orbit message added')
 }

@@ -55,6 +55,10 @@ export const messageCommandRouter = (req: Request, res: Response, next: NextFunc
                 req.url = '/v1/commands/orbit'
                 req.method = 'get'
                 break
+            case 'help':
+                req.url = '/v1/commands/help'
+                req.method = 'get'
+                break
             default:
                 // TODO send invalid command message
                 res.sendStatus(204)

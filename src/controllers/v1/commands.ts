@@ -5,7 +5,7 @@ import cronParser from 'cron-parser'
 import middlewares from '@middlewares'
 import { space } from '@/types'
 import { OrbitModel } from '@/models'
-import { sendAddSuccessMessage, sendDeleteFailMessage, sendDeleteSuccessMessage, sendOrbitListMessage } from '@services/space'
+import { sendAddSuccessMessage, sendDeleteFailMessage, sendDeleteSuccessMessage, sendHelpMessage, sendOrbitListMessage } from '@services/space'
 
 const router = asyncify(express.Router())
 
@@ -22,9 +22,19 @@ router.get('/list', async (req, res) => {
                 name: 'list',
                 description: 'show registered orbit messages',
             },
+            {
+                name: 'help',
+                description: 'show help message',
+            },
         ],
     }
     res.status(200).json(commands)
+})
+
+router.get('/help', async (req: Request, res: Response, next: NextFunction) => {
+    const body = req.body as space.MessagePayload
+    await sendHelpMessage(req.organization, body.userId)
+    res.sendStatus(204)
 })
 
 router.post('/orbit', middlewares.commands.addCommandValidator, async (req, res, next) => {

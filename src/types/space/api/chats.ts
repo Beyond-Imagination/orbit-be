@@ -16,7 +16,20 @@ export interface ChatMessageBlock {
 
 export interface MessageSection {
     className: 'MessageSection'
-    elements: (MessageFields | MessageControlGroup | MessageDivider)[]
+    elements: (MessageText | MessageFields | MessageControlGroup | MessageDivider)[]
+}
+
+interface MessageText {
+    className: 'MessageText'
+    content: string
+    accessory?: MessageIcon
+}
+
+interface MessageIcon {
+    className: 'MessageIcon'
+    icon: {
+        icon: string
+    }
 }
 
 interface MessageFields {
