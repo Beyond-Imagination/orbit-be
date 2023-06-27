@@ -30,4 +30,9 @@ export default class Scheduler {
     public run() {
         schedule.scheduleJob('* * * * *', async () => await this.publish())
     }
+
+    public async stop() {
+        await schedule.gracefulShutdown() // wait finish current job
+        await this.queue.drained() // wait until last item in the queue is processed
+    }
 }

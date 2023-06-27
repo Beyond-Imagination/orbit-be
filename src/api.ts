@@ -1,3 +1,4 @@
+import http from 'http'
 import express from 'express'
 import compression from 'compression'
 import hpp from 'hpp'
@@ -10,6 +11,7 @@ import middlewares from '@middlewares'
 
 export default class API {
     app: express.Application
+    server: http.Server
 
     constructor(newrelic: any) {
         this.app = express()
@@ -48,19 +50,16 @@ export default class API {
     }
 
     public listen() {
-        const server = this.app.listen(PORT, () => {
+        this.server = this.app.listen(PORT, () => {
             logger.info(`🚀 App listening on the port: ${PORT} ENV: ${NODE_ENV}`)
         })
+    }
 
-        const gracefulShutdownHandler = function gracefulShutdownHandler() {
-            logger.info(`Gracefully shutting down`)
-            server.close(async function () {
-                logger.info('All requests stopped, shutting down')
-                process.exit()
+    public async close(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.server.close(() => {
+                resolve()
             })
-        }
-
-        process.on('SIGINT', gracefulShutdownHandler)
-        process.on('SIGTERM', gracefulShutdownHandler)
+        })
     }
 }
