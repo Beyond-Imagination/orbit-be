@@ -1,12 +1,16 @@
 import { DeleteResult, UpdateResult } from 'mongodb'
 import mongoose from 'mongoose'
-import { getModelForClass, prop, Ref, ReturnModelType } from '@typegoose/typegoose'
+import mongoosePaginate from 'mongoose-paginate-v2'
+import { getModelForClass, plugin, prop, Ref, ReturnModelType } from '@typegoose/typegoose'
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 import cronParser from 'cron-parser'
 
 import { Organization } from '@models/organization'
 
+@plugin(mongoosePaginate)
 export class Orbit extends TimeStamps {
+    static paginate: mongoose.PaginateModel<typeof Orbit>['paginate']
+
     public _id: mongoose.Types.ObjectId
 
     @prop({ ref: 'Organization' })
@@ -35,10 +39,12 @@ export class Orbit extends TimeStamps {
     }
 
     // nextExecutionTime 이 현재시간보다 과거인 애들 read
-    public static async findByExecutionTime(this: ReturnModelType<typeof Orbit>, executionTime: Date = new Date()): Promise<Orbit[]> {
-        return this.find({ nextExecutionTime: { $lte: executionTime } })
-            .populate('organization')
-            .exec()
+    public static async findByExecutionTime(
+        this: ReturnModelType<typeof Orbit>,
+        page: number,
+        executionTime: Date = new Date(),
+    ): Promise<mongoose.PaginateResult<mongoose.PaginateDocument<typeof Orbit, object, { limit: number }>>> {
+        return await this.paginate({ nextExecutionTime: { $lte: executionTime } }, { limit: 200, page: page, populate: 'organization' })
     }
 
     // 현재 object 의 nextExecutionTime 업데이트

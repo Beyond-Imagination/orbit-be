@@ -26,6 +26,7 @@
         "hpp": "^0.2.3",
         "jwk-to-pem": "^2.0.5",
         "mongoose": "^7.2.1",
+        "mongoose-paginate-v2": "^1.7.1",
         "newrelic": "^10.3.1",
         "node-fetch": "^2.6.11",
         "node-schedule": "^2.1.1",

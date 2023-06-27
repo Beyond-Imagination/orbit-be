@@ -15,10 +15,16 @@ export default class Scheduler {
     private async publish() {
         logger.info('run publisher')
 
-        const targetList = await OrbitModel.findByExecutionTime()
-        targetList.forEach(target => {
-            this.queue.push(target)
-        })
+        const now = new Date()
+        let page = 1
+        while (page) {
+            const orbits = await OrbitModel.findByExecutionTime(page, now)
+            for (const orbit of orbits.docs) {
+                await this.queue.push(orbit)
+            }
+
+            page = orbits.nextPage
+        }
     }
 
     public run() {
