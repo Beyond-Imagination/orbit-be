@@ -5,7 +5,7 @@ import cronParser from 'cron-parser'
 import middlewares from '@middlewares'
 import { space } from '@/types'
 import { OrbitModel } from '@/models'
-import { sendAddSuccessMessage, sendDeleteFailMessage, sendDeleteSuccessMessage, sendHelpMessage, sendOrbitListMessage } from '@services/space'
+import * as chat from '@services/space/chats'
 
 const router = asyncify(express.Router())
 
@@ -33,7 +33,7 @@ router.get('/list', async (req, res) => {
 
 router.get('/help', async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body as space.MessagePayload
-    await sendHelpMessage(req.organization, body.userId)
+    await chat.sendHelpMessage(req.organization, body.userId)
     res.sendStatus(204)
 })
 
@@ -48,15 +48,18 @@ router.post('/orbit', middlewares.commands.addCommandValidator, async (req, res,
         authorId: body.userId,
         nextExecutionTime: cronParser.parseExpression(req.command.cron).next(),
     })
-    await sendAddSuccessMessage(req.organization, body.userId)
+    await chat.sendAddSuccessMessage(req.organization, body.userId)
     res.sendStatus(204)
 })
 
 router.get('/orbit', async (req, res, next) => {
     const body = req.body as space.MessagePayload
     const orbits = await OrbitModel.findByClientId(req.organization.clientId)
-    // TODO send different message when orbits is empty array
-    await sendOrbitListMessage(req.organization, body.userId, orbits)
+    if (orbits.length) {
+        await chat.sendOrbitListMessage(req.organization, body.userId, orbits)
+    } else {
+        await chat.sendEmptyOrbitListMessage(req.organization, body.userId)
+    }
     res.sendStatus(204)
 })
 
@@ -70,9 +73,9 @@ router.delete(
         const body = req.body as space.MessageActionPayload
         const result = await OrbitModel.deleteById(body.actionValue)
         if (result.deletedCount > 0) {
-            await sendDeleteSuccessMessage(req.organization, body.userId)
+            await chat.sendDeleteSuccessMessage(req.organization, body.userId)
         } else {
-            await sendDeleteFailMessage(req.organization, body.userId)
+            await chat.sendDeleteFailMessage(req.organization, body.userId)
         }
         res.sendStatus(204)
     },

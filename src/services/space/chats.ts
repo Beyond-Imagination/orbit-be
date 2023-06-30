@@ -138,6 +138,10 @@ export async function sendOrbitListMessage(organization: Organization, userId: s
     await sendMessage(organization, message)
 }
 
+export async function sendEmptyOrbitListMessage(organization: Organization, userId: string) {
+    await sendTextMessage(organization, userId, 'no orbit message')
+}
+
 export async function sendDeleteSuccessMessage(organization: Organization, userId: string) {
     await sendTextMessage(organization, userId, 'the orbit message deleted')
 }
