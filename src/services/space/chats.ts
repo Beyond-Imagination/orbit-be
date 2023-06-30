@@ -3,6 +3,7 @@ import fetch from 'node-fetch'
 import { Orbit, Organization } from '@/models'
 import { ChatMessage, MessageDivider, MessageSection } from '@types/space'
 import { logger } from '@utils/logger'
+import { MAX_ORBIT_COUNT } from '@config'
 
 async function sendMessage(organization: Organization, message: ChatMessage) {
     const url = `${organization.serverUrl}/api/http/chats/messages/send-message`
@@ -79,6 +80,14 @@ export async function sendAddSuccessMessage(organization: Organization, userId: 
 
 export async function sendAddFailMessage(organization: Organization, userId: string) {
     await sendTextMessage(organization, userId, 'fail to add a new orbit message. check your command')
+}
+
+export async function sendAddErrorMessage(organization: Organization, userId: string) {
+    await sendTextMessage(
+        organization,
+        userId,
+        `fail to add a new orbit message. Only up to ${MAX_ORBIT_COUNT} messages can be registered per organization.`,
+    )
 }
 
 export async function sendOrbitListMessage(organization: Organization, userId: string, orbits: Orbit[]) {

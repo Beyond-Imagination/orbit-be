@@ -37,7 +37,7 @@ router.get('/help', async (req: Request, res: Response, next: NextFunction) => {
     res.sendStatus(204)
 })
 
-router.post('/orbit', middlewares.commands.addCommandValidator, async (req, res, next) => {
+router.post('/orbit', middlewares.commands.addCommandValidator, middlewares.commands.orbitMaxCountLimiter, async (req, res, next) => {
     const body = req.body as space.MessagePayload
     await OrbitModel.create({
         organization: req.organization._id,
