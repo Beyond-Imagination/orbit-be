@@ -6,9 +6,23 @@ import { sendAddFailMessage } from '@services/space'
 
 export const addRegex = /"[^"]+"|\w+/g
 
+export function removeSurroundingDoubleQuote(text: string): string {
+    if (!text?.length) {
+        return ''
+    }
+
+    const start = text.at(0) === '"' ? 1 : 0
+    const end = text.at(-1) === '"' ? -1 : text.length
+
+    return text.slice(start, end)
+}
+
 export async function addCommandValidator(req: Request, res: Response, next: NextFunction) {
     const body = req.body as MessagePayload
     let [command, channelName, cron, message, ...rest] = body.message.body.text.match(addRegex) // eslint-disable-line
+
+    cron = removeSurroundingDoubleQuote(cron)
+    message = removeSurroundingDoubleQuote(message)
 
     if (rest.length) {
         await sendAddFailMessage(req.organization, body.userId)
@@ -18,16 +32,13 @@ export async function addCommandValidator(req: Request, res: Response, next: Nex
     if (!message) {
         await sendAddFailMessage(req.organization, body.userId)
         return res.sendStatus(204)
-    } else {
-        message = message.slice(1, -1)
     }
 
-    if (!cron) {
+    if (!cron || cron.split(' ').length !== 5) {
         await sendAddFailMessage(req.organization, body.userId)
-        return res.sendStatus(204)
+        return res.sendStatus(404)
     } else {
         try {
-            cron = cron.slice(1, -1)
             cronParser.parseExpression(cron)
         } catch (e) {
             await sendAddFailMessage(req.organization, body.userId)
