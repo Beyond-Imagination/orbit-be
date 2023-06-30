@@ -9,3 +9,5 @@ export const VERSION = version
 export function isProduction(): boolean {
     return NODE_ENV === 'production'
 }
+
+export const MESSENGER_CONCURRENCY = Number.parseInt(process.env.MESSENGER_CONCURRENCY) || 500

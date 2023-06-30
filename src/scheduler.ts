@@ -4,12 +4,13 @@ import schedule from 'node-schedule'
 import Messenger from '@/messenger'
 import { logger } from '@utils/logger'
 import { OrbitModel } from '@/models'
+import { MESSENGER_CONCURRENCY } from '@config'
 
 export default class Scheduler {
     queue: queueAsPromised
 
     constructor(messenger: Messenger) {
-        this.queue = fastq.promise(messenger.handler, 5)
+        this.queue = fastq.promise(messenger.handler, MESSENGER_CONCURRENCY)
     }
 
     private async publish() {
