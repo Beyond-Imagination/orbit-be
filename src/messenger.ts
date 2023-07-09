@@ -1,8 +1,11 @@
+import newrelic from 'newrelic'
+
 import { sendChannelMessage } from '@services/space'
 import { Orbit, Organization } from '@/models'
 
 export default class Messenger {
     public async handler(arg: Orbit) {
+        newrelic.incrementMetric('messenger')
         // 실제로 사용자에게 메시지를 전송하는 부분
         const { organization } = { organization: arg.organization } as { organization: Organization }
         await sendChannelMessage(organization, arg.channelName, arg.message)

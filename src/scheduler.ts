@@ -14,6 +14,7 @@ export default class Scheduler {
     }
 
     private async publish() {
+        newrelic.incrementMetric('scheduler')
         await newrelic.startBackgroundTransaction('scheduler', async () => {
             const now = new Date()
             let page = 1
