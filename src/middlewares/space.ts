@@ -38,6 +38,9 @@ export const classNameRouter = (req: Request, res: Response, next: NextFunction)
             break
         case 'MessageActionPayload':
             break
+        case 'AppPublicationCheckPayload':
+            res.sendStatus(200)
+            return
     }
     res.meta.path = req.url
     next()
