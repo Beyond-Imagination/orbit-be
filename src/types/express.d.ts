@@ -14,6 +14,7 @@ declare global {
             meta: {
                 requestId: string
                 path?: string
+                method?: string
                 error?: Error
             }
         }

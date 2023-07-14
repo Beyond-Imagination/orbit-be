@@ -20,19 +20,19 @@ export const classNameRouter = (req: Request, res: Response, next: NextFunction)
     switch (req.body.className) {
         case 'InitPayload':
             req.url = '/v1/webhooks/install'
-            req.method = 'post'
+            req.method = 'POST'
             break
         case 'ChangeServerUrlPayload':
             req.url = '/v1/webhooks/changeServerUrl'
-            req.method = 'put'
+            req.method = 'PUT'
             break
         case 'ApplicationUninstalledPayload':
             req.url = '/v1/webhooks/uninstall'
-            req.method = 'delete'
+            req.method = 'DELETE'
             break
         case 'ListCommandsPayload':
             req.url = '/v1/commands/list'
-            req.method = 'get'
+            req.method = 'GET'
             break
         case 'MessagePayload':
             break
@@ -43,6 +43,7 @@ export const classNameRouter = (req: Request, res: Response, next: NextFunction)
             return
     }
     res.meta.path = req.url
+    res.meta.method = req.method
     next()
 }
 
@@ -52,15 +53,15 @@ export const messageCommandRouter = (req: Request, res: Response, next: NextFunc
         switch (commands[0]) {
             case 'add':
                 req.url = '/v1/commands/orbit'
-                req.method = 'post'
+                req.method = 'POST'
                 break
             case 'list':
                 req.url = '/v1/commands/orbit'
-                req.method = 'get'
+                req.method = 'GET'
                 break
             case 'help':
                 req.url = '/v1/commands/help'
-                req.method = 'get'
+                req.method = 'GET'
                 break
             default:
                 // TODO send invalid command message
@@ -68,6 +69,7 @@ export const messageCommandRouter = (req: Request, res: Response, next: NextFunc
                 return
         }
         res.meta.path = req.url
+        res.meta.method = req.method
     }
     next()
 }
@@ -77,13 +79,14 @@ export function actionRouter(req: Request, res: Response, next: NextFunction) {
         switch (req.body.actionId) {
             case 'delete':
                 req.url = '/v1/commands/orbit'
-                req.method = 'delete'
+                req.method = 'DELETE'
                 break
             default:
                 res.sendStatus(500)
                 return
         }
         res.meta.path = req.url
+        res.meta.method = req.method
     }
     next()
 }
