@@ -21,7 +21,7 @@ export default class Scheduler {
             while (page) {
                 const orbits = await OrbitModel.findByExecutionTime(page, now)
                 for (const orbit of orbits.docs) {
-                    await this.queue.push(orbit)
+                    this.queue.push(orbit)
                 }
 
                 page = orbits.nextPage
