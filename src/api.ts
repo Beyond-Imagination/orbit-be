@@ -40,6 +40,7 @@ export default class API {
         this.app.use('/v1/webhooks', controllers.v1.webhooks)
         this.app.use('/v1/commands', controllers.v1.commands)
         this.app.use('/v1/orbits', controllers.v1.orbit)
+        this.app.use('/admin', controllers.admin)
         if (!isProduction()) {
             this.app.use('/dev', controllers.dev)
         }

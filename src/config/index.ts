@@ -12,3 +12,4 @@ export function isProduction(): boolean {
 
 export const MESSENGER_CONCURRENCY = Number.parseInt(process.env.MESSENGER_CONCURRENCY) || 500
 export const MAX_ORBIT_COUNT = Number.parseInt(process.env.MAX_ORBIT_COUNT) || 20
+export const SALT_ROUNDS = Number.parseInt(process.env.SALT_ROUNDS) || 10
