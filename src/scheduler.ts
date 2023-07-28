@@ -5,6 +5,7 @@ import newrelic from 'newrelic'
 import Messenger from '@/messenger'
 import { OrbitModel } from '@/models'
 import { MESSENGER_CONCURRENCY } from '@config'
+import { logger } from '@utils/logger'
 
 export default class Scheduler {
     queue: queueAsPromised
@@ -30,7 +31,13 @@ export default class Scheduler {
     }
 
     public run() {
-        schedule.scheduleJob('* * * * *', async () => await this.publish())
+        schedule.scheduleJob('* * * * *', async () => {
+            try {
+                await this.publish()
+            } catch (e) {
+                logger.error('scheduler fail', { error: e })
+            }
+        })
     }
 
     public async stop() {
