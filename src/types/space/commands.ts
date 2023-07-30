@@ -8,5 +8,6 @@ export interface Commands {
 export interface AddCommandBody {
     channelName: string
     cron: string
+    timezone: string
     message: string
 }

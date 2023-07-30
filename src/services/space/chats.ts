@@ -1,4 +1,5 @@
 import fetch from 'node-fetch'
+import moment from 'moment-timezone'
 
 import { Orbit, Organization } from '@/models'
 import { ChatMessage, MessageDivider, MessageSection } from '@types/space'
@@ -57,7 +58,7 @@ export async function sendHelpMessage(organization: Organization, userId: string
                                 {
                                     className: 'MessageField',
                                     first: 'format',
-                                    second: 'add {channel_name} "{cron}" "{message}"',
+                                    second: 'add {channel_name} "{cron} {timezone}" "{message}"',
                                 },
                                 {
                                     className: 'MessageField',
@@ -109,13 +110,18 @@ export async function sendOrbitListMessage(organization: Organization, userId: s
                     },
                     {
                         className: 'MessageField',
+                        first: 'timezone',
+                        second: orbit.timezone,
+                    },
+                    {
+                        className: 'MessageField',
                         first: 'message',
                         second: orbit.message,
                     },
                     {
                         className: 'MessageField',
                         first: 'created at',
-                        second: orbit.createdAt.toUTCString(),
+                        second: moment.tz(orbit.createdAt, orbit.timezone).format('YYYY-MM-DD HH:mm:ss'),
                     },
                 ],
             },

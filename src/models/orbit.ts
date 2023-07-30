@@ -28,6 +28,9 @@ export class Orbit extends TimeStamps {
     @prop({ required: true })
     public cron: string
 
+    @prop({ default: 'Etc/UTC' })
+    public timezone: string
+
     @prop()
     public authorId: string
 

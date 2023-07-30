@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import cronParser from 'cron-parser'
+import moment from 'moment-timezone'
 
 import { MessagePayload } from '@types/space'
 import { sendAddErrorMessage, sendAddFailMessage } from '@services/space'
@@ -22,6 +23,7 @@ export function removeSurroundingDoubleQuote(text: string): string {
 export async function addCommandValidator(req: Request, res: Response, next: NextFunction) {
     const body = req.body as MessagePayload
     let [command, channelName, cron, message, ...rest] = body.message.body.text.match(addRegex) // eslint-disable-line
+    let timezone
 
     cron = removeSurroundingDoubleQuote(cron)
     message = removeSurroundingDoubleQuote(message)
@@ -36,10 +38,21 @@ export async function addCommandValidator(req: Request, res: Response, next: Nex
         return res.sendStatus(204)
     }
 
-    if (!cron || cron.split(' ').length !== 5) {
+    const cronLength = cron.split(' ').length
+    if (!cron || (cronLength !== 5 && cronLength !== 6)) {
         await sendAddFailMessage(req.organization, body.userId)
-        return res.sendStatus(404)
+        return res.sendStatus(204)
     } else {
+        if (cronLength === 6) {
+            // has timezone
+            const lastSpaceIndex = cron.lastIndexOf(' ')
+            timezone = cron.slice(lastSpaceIndex + 1)
+            cron = cron.slice(0, lastSpaceIndex)
+            if (moment.tz.zone(timezone) === null) {
+                await sendAddFailMessage(req.organization, body.userId)
+                return res.sendStatus(204)
+            }
+        }
         try {
             cronParser.parseExpression(cron)
         } catch (e) {
@@ -62,8 +75,10 @@ export async function addCommandValidator(req: Request, res: Response, next: Nex
     req.command = {
         channelName,
         cron,
+        timezone,
         message,
     }
+
     next()
 }
 
