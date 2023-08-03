@@ -63,7 +63,7 @@ export async function sendHelpMessage(organization: Organization, userId: string
                                 {
                                     className: 'MessageField',
                                     first: 'example',
-                                    second: 'add my_channel "* * * * *" "welcome to orbit"',
+                                    second: 'add my_channel "* * * * * Asia/Seoul" "welcome to orbit"',
                                 },
                             ],
                         },
