@@ -39,6 +39,7 @@ router.get('/help', async (req: Request, res: Response, next: NextFunction) => {
 
 router.post('/orbit', middlewares.commands.addCommandValidator, middlewares.commands.orbitMaxCountLimiter, async (req, res, next) => {
     const body = req.body as space.MessagePayload
+    const options = { tz: req.command.timezone }
     await OrbitModel.create({
         organization: req.organization._id,
         clientId: body.clientId,
@@ -47,7 +48,7 @@ router.post('/orbit', middlewares.commands.addCommandValidator, middlewares.comm
         cron: req.command.cron,
         timezone: req.command.timezone,
         authorId: body.userId,
-        nextExecutionTime: cronParser.parseExpression(req.command.cron).next(),
+        nextExecutionTime: cronParser.parseExpression(req.command.cron, options).next(),
     })
     await chat.sendAddSuccessMessage(req.organization, body.userId)
     res.sendStatus(204)

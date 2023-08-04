@@ -52,7 +52,8 @@ export class Orbit extends TimeStamps {
 
     // 현재 object 의 nextExecutionTime 업데이트
     public async updateNextExecutionTime(): Promise<UpdateResult> {
-        const next = cronParser.parseExpression(this.cron).next()
+        const options = { tz: this.timezone }
+        const next = cronParser.parseExpression(this.cron, options).next()
         return await OrbitModel.updateOne({ _id: this._id }, { nextExecutionTime: next }).exec()
     }
 
