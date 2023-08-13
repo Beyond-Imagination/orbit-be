@@ -25,6 +25,7 @@ export async function addCommandValidator(req: Request, res: Response, next: Nex
     let [command, channelName, cron, message, ...rest] = body.message.body.text.match(addRegex) // eslint-disable-line
     let timezone
 
+    channelName = removeSurroundingDoubleQuote(channelName)
     cron = removeSurroundingDoubleQuote(cron)
     message = removeSurroundingDoubleQuote(message)
 

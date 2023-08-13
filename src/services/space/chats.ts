@@ -58,12 +58,12 @@ export async function sendHelpMessage(organization: Organization, userId: string
                                 {
                                     className: 'MessageField',
                                     first: 'format',
-                                    second: 'add {channel_name} "{cron} {timezone}" "{message}"',
+                                    second: 'add "{channel_name}" "{cron} {timezone}" "{message}"',
                                 },
                                 {
                                     className: 'MessageField',
                                     first: 'example',
-                                    second: 'add my_channel "* * * * * Asia/Seoul" "welcome to orbit"',
+                                    second: 'add "my channel" "* * * * * Asia/Seoul" "welcome to orbit"',
                                 },
                             ],
                         },
