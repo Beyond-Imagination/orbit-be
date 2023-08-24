@@ -98,6 +98,10 @@ async function setOrganization(req: Request, res: Response, next: NextFunction) 
         const organization = await OrganizationModel.findByClientId(req.body.clientId)
         req.organization = organization
         req.organizationSecret = organization
+    } else if (req.query.serverUrl) {
+        const organization = await OrganizationModel.findByServerUrl(req.query.serverUrl as string)
+        req.organization = organization
+        req.organizationSecret = organization
     }
     next()
 }
@@ -128,3 +132,11 @@ async function verifySignature(req: Request, res: Response, next: NextFunction) 
 }
 
 export const verifySpaceRequest = [setOrganization, verifySignature]
+
+async function verifyUser(req: Request, res: Response, next: NextFunction) {
+    // const token = req.header('Authorization')
+    // TODO: call space api with token to verify if token is valid
+    next()
+}
+
+export const verifyUserRequest = [setOrganization, verifyUser]
