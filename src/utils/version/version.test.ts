@@ -1,14 +1,20 @@
 import { getInstallInfo } from '@utils/version'
-import v010 from '@utils/version/v0.1.0'
 import { errors } from '@/types'
+
+import v010 from '@utils/version/v0.1.0'
+import v030 from '@utils/version/v0.3.0'
 
 describe('space install version', () => {
     it('should get v0.1.0', () => {
         expect(getInstallInfo('0.1.0')).toBe(v010)
     })
 
+    it('should get v0.3.0', () => {
+        expect(getInstallInfo('0.3.0')).toBe(v030)
+    })
+
     it('should get latest', () => {
-        expect(getInstallInfo()).toBe(v010)
+        expect(getInstallInfo()).toBe(v030)
     })
 
     it('should throw error with unknown version', () => {
