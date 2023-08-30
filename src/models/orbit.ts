@@ -37,6 +37,10 @@ export class Orbit extends TimeStamps {
     @prop({ index: true })
     public nextExecutionTime: Date
 
+    public static async findById(this: ReturnModelType<typeof Orbit>, id: string): Promise<Orbit> {
+        return await this.findOne({ _id: id }).exec()
+    }
+
     public static async findByClientId(this: ReturnModelType<typeof Orbit>, clientId: string): Promise<Orbit[]> {
         return await this.find({ clientId }).exec()
     }

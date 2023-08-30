@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express'
 import asyncify from 'express-asyncify'
 
 import { verifyUserRequest } from '@/middlewares/space'
+import { OrbitModel } from '@/models'
+import { sendChannelMessage } from '@/services/space/chats'
 
 const router = asyncify(express.Router())
 
@@ -26,8 +28,10 @@ router.delete('/:id', verifyUserRequest, (req: Request, res: Response) => {
     res.sendStatus(204)
 })
 
-router.post('/:id/send', verifyUserRequest, (req: Request, res: Response) => {
-    // TODO: send orbit message
+router.post('/:id/send', verifyUserRequest, async (req: Request, res: Response) => {
+    const orbit = await OrbitModel.findById(req.params.id)
+    await sendChannelMessage(req.organization, orbit.channelName, orbit.message)
+
     res.sendStatus(204)
 })
 
