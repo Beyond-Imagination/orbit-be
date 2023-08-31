@@ -4,6 +4,8 @@ import asyncify from 'express-asyncify'
 import { verifyUserRequest } from '@/middlewares/space'
 import { OrbitModel } from '@/models'
 import { sendChannelMessage } from '@/services/space/chats'
+import { DeleteResult } from 'mongodb'
+import { InvalidOrbitId } from '@types/errors/orbit'
 
 const router = asyncify(express.Router())
 
@@ -23,8 +25,11 @@ router.put('/:id', verifyUserRequest, (req: Request, res: Response) => {
     res.sendStatus(204)
 })
 
-router.delete('/:id', verifyUserRequest, (req: Request, res: Response) => {
-    // TODO: delete orbit message
+router.delete('/:id', verifyUserRequest, async (req: Request, res: Response) => {
+    const deleteResult: DeleteResult = await OrbitModel.deleteById(req.params.id)
+    if (deleteResult.deletedCount === 0) {
+        throw new InvalidOrbitId()
+    }
     res.sendStatus(204)
 })
 
