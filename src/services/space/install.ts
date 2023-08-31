@@ -7,6 +7,10 @@ export async function install(organization: Organization | space.IOrganizationSe
     await Promise.all([setUIExtension(organization, installInfo), requestRights(organization, installInfo)])
 }
 
+export async function update(organization: Organization, installInfo: installInfo) {
+    await Promise.all([setUIExtension(organization, installInfo), requestRights(organization, installInfo)])
+}
+
 async function setUIExtension(organization: Organization | space.IOrganizationSecret, installInfo: installInfo): Promise<void> {
     const url = `${organization.serverUrl}/api/http/applications/ui-extensions`
     const body = JSON.stringify(installInfo.uiExtension)

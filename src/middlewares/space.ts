@@ -91,7 +91,7 @@ export function actionRouter(req: Request, res: Response, next: NextFunction) {
     next()
 }
 
-async function setOrganization(req: Request, res: Response, next: NextFunction) {
+export async function setOrganization(req: Request, res: Response, next: NextFunction) {
     if (req.body.className === 'InitPayload') {
         req.organizationSecret = new OrganizationSecret(req.body.clientId, req.body.clientSecret, req.body.serverUrl)
     } else if (req.body.clientId) {

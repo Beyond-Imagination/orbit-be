@@ -6,6 +6,9 @@ import { SECRET_KEY } from '@config'
 import { v4 } from 'uuid'
 import { revokeToken } from '@utils/blacklist'
 import { adminLoginResponse } from '@types/admin'
+import { Organization } from '@/models'
+import { getInstallInfo } from '@utils/version'
+import { update } from '@services/space'
 
 export async function register(username: string, password: string, name: string): Promise<void> {
     return await Admin.saveAdmin(username, password, name)
@@ -35,4 +38,9 @@ export async function login(username: string, password: string): Promise<adminLo
 
 export function logout(jwt: string): void {
     revokeToken(jwt)
+}
+
+export async function versionUpdate(organization: Organization, version: string) {
+    const installInfo = getInstallInfo(version)
+    await update(organization, installInfo)
 }

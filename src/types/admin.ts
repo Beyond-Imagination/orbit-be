@@ -16,3 +16,8 @@ export interface adminLogoutRequest {
 export interface adminLoginResponse {
     token: string
 }
+
+export interface organizationVersionUpdateRequest {
+    serverUrl: string
+    version: string
+}
