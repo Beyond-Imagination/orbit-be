@@ -98,8 +98,9 @@ export async function setOrganization(req: Request, res: Response, next: NextFun
         const organization = await OrganizationModel.findByClientId(req.body.clientId)
         req.organization = organization
         req.organizationSecret = organization
-    } else if (req.query.serverUrl) {
-        const organization = await OrganizationModel.findByServerUrl(req.query.serverUrl as string)
+    } else if (req.query.serverUrl || req.body.serverUrl) {
+        const serverUrl: string = (req.query.serverUrl as string) || req.body.serverUrl
+        const organization = await OrganizationModel.findByServerUrl(serverUrl)
         req.organization = organization
         req.organizationSecret = organization
     }
