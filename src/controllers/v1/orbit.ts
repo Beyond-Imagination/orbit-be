@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import asyncify from 'express-asyncify'
+import cronParser from 'cron-parser'
 
 import { verifyUserRequest } from '@/middlewares/space'
 import { OrbitModel } from '@/models'
@@ -20,8 +21,18 @@ router.post('/', verifyUserRequest, (req: Request, res: Response) => {
     res.sendStatus(204)
 })
 
-router.put('/:id', verifyUserRequest, (req: Request, res: Response) => {
-    // TODO: update orbit message
+router.put('/:id', verifyUserRequest, async (req: Request, res: Response) => {
+    const filter = { _id: req.params.id }
+    const options = { tz: req.body.timezone }
+    const update = {
+        channelName: req.body.channel,
+        message: req.body.message,
+        cron: req.body.cron,
+        timezone: req.body.timezone,
+        nextExecutionTime: cronParser.parseExpression(req.body.cron, options).next().toDate(),
+    }
+    await OrbitModel.findOneAndUpdate(filter, update)
+
     res.sendStatus(204)
 })
 
