@@ -65,6 +65,21 @@ export class Orbit extends TimeStamps {
     public static async deleteById(this: ReturnModelType<typeof Orbit>, id: string): Promise<DeleteResult> {
         return this.deleteOne({ _id: id })
     }
+
+    public toJSON(): object {
+        return {
+            _id: this._id,
+            clientId: this.clientId,
+            channelName: this.channelName,
+            message: this.message,
+            cron: this.cron,
+            timezone: this.timezone,
+            authorId: this.authorId,
+            nextExecutionTime: this.nextExecutionTime,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt,
+        }
+    }
 }
 
 export const OrbitModel = getModelForClass(Orbit)
