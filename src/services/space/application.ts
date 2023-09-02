@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 
-import { AccessToken, IOrganizationSecret, PublicKeys } from '@types/space'
-import { Unauthorized } from '@types/errors'
+import { AccessToken, IOrganizationSecret, PublicKeys } from '@/types/space'
+import { Unauthorized } from '@/types/errors'
 
 export async function getAccessToken(secret: IOrganizationSecret): Promise<AccessToken> {
     const url = `${secret.serverUrl}/oauth/token`

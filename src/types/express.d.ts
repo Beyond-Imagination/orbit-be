@@ -1,5 +1,5 @@
 import { Organization } from '@/models'
-import { AddCommandBody, IOrganizationSecret } from '@types/space'
+import { AddCommandBody, IOrganizationSecret } from '@/types/space'
 
 declare global {
     namespace Express {

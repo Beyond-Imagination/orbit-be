@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import { getModelForClass, prop, ReturnModelType } from '@typegoose/typegoose'
 import bcrypt from 'bcrypt'
 import { SALT_ROUNDS } from '@config'
-import { AlreadyExistedUsername } from '@types/errors/admin'
+import { AlreadyExistedUsername } from '@/types/errors/admin'
 
 export class Admin extends TimeStamps {
     public _id: mongoose.Types.ObjectId

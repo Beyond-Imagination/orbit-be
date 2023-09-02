@@ -6,7 +6,7 @@ import { verifyUserRequest } from '@/middlewares/space'
 import { Orbit, OrbitModel } from '@/models'
 import { sendChannelMessage } from '@/services/space/chats'
 import { DeleteResult } from 'mongodb'
-import { InvalidOrbitId } from '@types/errors/orbit'
+import { InvalidOrbitId } from '@/types/errors/orbit'
 
 const router = asyncify(express.Router())
 

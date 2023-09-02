@@ -1,4 +1,4 @@
-import { APIError } from '@types/errors/error'
+import { APIError } from '@/types/errors/error'
 
 export class AlreadyExistedUsername extends APIError {
     constructor() {

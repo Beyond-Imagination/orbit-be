@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import cronParser from 'cron-parser'
 import moment from 'moment-timezone'
 
-import { MessagePayload } from '@types/space'
+import { MessagePayload } from '@/types/space'
 import { sendAddErrorMessage, sendAddFailMessage } from '@services/space'
 import { Orbit, OrbitModel } from '@/models'
 import { MAX_ORBIT_COUNT } from '@config'

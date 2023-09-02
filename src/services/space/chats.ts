@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 import moment from 'moment-timezone'
 
 import { Orbit, Organization } from '@/models'
-import { ChatMessage, MessageDivider, MessageSection } from '@types/space'
+import { ChatMessage, MessageDivider, MessageSection } from '@/types/space'
 import { logger } from '@utils/logger'
 import { MAX_ORBIT_COUNT } from '@config'
 

@@ -4,7 +4,7 @@ import { getModelForClass, prop, ReturnModelType } from '@typegoose/typegoose'
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 
 import { OrganizationNotFoundException } from '@/types/errors'
-import { IOrganizationSecret } from '@types/space'
+import { IOrganizationSecret } from '@/types/space'
 import { getBearerToken } from '@services/space'
 
 export class OrganizationSecret implements IOrganizationSecret {

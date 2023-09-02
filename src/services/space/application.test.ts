@@ -1,6 +1,6 @@
 import { getAccessToken, getPublicKeys } from '@services/space/application'
-import { IOrganizationSecret } from '@types/space'
-import { Unauthorized } from '@types/errors'
+import { IOrganizationSecret } from '@/types/space'
+import { Unauthorized } from '@/types/errors'
 
 jest.setTimeout(30000)
 
