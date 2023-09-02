@@ -3,6 +3,7 @@ import express from 'express'
 import compression from 'compression'
 import hpp from 'hpp'
 import helmet from 'helmet'
+import cors from 'cors'
 
 import { isProduction, NODE_ENV, PORT } from '@config'
 import { logger, loggerMiddleware } from '@utils/logger'
@@ -25,6 +26,7 @@ export default class API {
 
     setPreMiddleware() {
         this.app.use(helmet())
+        this.app.use(cors())
         this.app.use(compression())
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
