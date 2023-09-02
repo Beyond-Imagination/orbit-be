@@ -7,7 +7,6 @@ import { Orbit, OrbitModel } from '@/models'
 import { sendChannelMessage } from '@/services/space/chats'
 import { DeleteResult } from 'mongodb'
 import { InvalidOrbitId } from '@types/errors/orbit'
-import cronParser from 'cron-parser'
 
 const router = asyncify(express.Router())
 
@@ -22,7 +21,7 @@ router.post('/', verifyUserRequest, async (req: Request, res: Response) => {
     await OrbitModel.create({
         organization: req.organization._id,
         clientId: req.organization.clientId,
-        authorId: req.userId,
+        authorId: null,
         channelName: req.body.channel,
         message: req.body.message,
         cron: req.body.cron,
