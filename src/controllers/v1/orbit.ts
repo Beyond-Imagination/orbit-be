@@ -1,19 +1,18 @@
 import express, { Request, Response } from 'express'
 import asyncify from 'express-asyncify'
 import cronParser from 'cron-parser'
+import { DeleteResult } from 'mongodb'
 
+import { InvalidOrbitId } from '@/types/errors/orbit'
 import { verifyUserRequest } from '@/middlewares/space'
 import { Orbit, OrbitModel } from '@/models'
 import { sendChannelMessage } from '@/services/space/chats'
-import { DeleteResult } from 'mongodb'
-import { InvalidOrbitId } from '@/types/errors/orbit'
 
 const router = asyncify(express.Router())
 
 router.get('/', verifyUserRequest, async (req: Request, res: Response) => {
-    const organization = req.organization
-    const results: Orbit[] = await OrbitModel.findByClientId(organization.clientId)
-    res.status(200).json(results)
+    const results: Orbit[] = await OrbitModel.findByClientId(req.organization.clientId)
+    res.status(200).json({ orbits: results })
 })
 
 router.post('/', verifyUserRequest, async (req: Request, res: Response) => {
