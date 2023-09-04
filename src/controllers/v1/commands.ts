@@ -44,6 +44,7 @@ router.post('/orbit', middlewares.commands.addCommandValidator, middlewares.comm
         organization: req.organization._id,
         clientId: body.clientId,
         channelName: req.command.channelName,
+        format: req.command.format,
         message: req.command.message,
         cron: req.command.cron,
         timezone: req.command.timezone,

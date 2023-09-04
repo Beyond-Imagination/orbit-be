@@ -6,6 +6,7 @@ export interface Commands {
 }
 
 export interface AddCommandBody {
+    format: string
     channelName: string
     cron: string
     timezone: string

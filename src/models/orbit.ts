@@ -22,6 +22,9 @@ export class Orbit extends TimeStamps {
     @prop({ required: true })
     public channelName: string
 
+    @prop({ default: 'cron' })
+    public format: string
+
     @prop({ required: true })
     public message: string
 
@@ -71,6 +74,7 @@ export class Orbit extends TimeStamps {
             _id: this._id,
             clientId: this.clientId,
             channelName: this.channelName,
+            format: this.format,
             message: this.message,
             cron: this.cron,
             timezone: this.timezone,
