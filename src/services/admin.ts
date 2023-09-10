@@ -1,12 +1,11 @@
-import { Admin, AdminModel } from '@models/admin'
 import bcrypt from 'bcrypt'
-import { AdminNotFound, AdminNotPermitted, AuthenticationFailed } from '@/types/errors/admin'
 import jwt from 'jsonwebtoken'
-import { SECRET_KEY } from '@config'
 import { v4 } from 'uuid'
+
+import { SECRET_KEY } from '@config'
+import { Organization, OrganizationModel, Admin, AdminModel } from '@/models'
+import { admin, errors } from '@/types'
 import { revokeToken } from '@utils/blacklist'
-import { adminLoginResponse } from '@/types/admin'
-import { Organization } from '@/models'
 import { getInstallInfo } from '@utils/version'
 import { update } from '@services/space'
 
@@ -14,18 +13,18 @@ export async function register(username: string, password: string, name: string)
     return await Admin.saveAdmin(username, password, name)
 }
 
-export async function login(username: string, password: string): Promise<adminLoginResponse> {
+export async function login(username: string, password: string): Promise<admin.adminLoginResponse> {
     const admin = await AdminModel.findByUsername(username)
     if (!admin) {
-        throw new AdminNotFound()
+        throw new errors.AdminNotFound()
     }
 
     if (!bcrypt.compareSync(password, admin.password)) {
-        throw new AuthenticationFailed()
+        throw new errors.AuthenticationFailed()
     }
 
     if (!admin.hasApproved) {
-        throw new AdminNotPermitted()
+        throw new errors.AdminNotPermitted()
     }
     AdminModel.updateOne({ _id: admin._id }, { lastLoggedIn: new Date() })
     // 현재는 대칭키 방식으로 암호화된 토큰 발행
@@ -43,4 +42,6 @@ export function logout(jwt: string): void {
 export async function versionUpdate(organization: Organization, version: string) {
     const installInfo = getInstallInfo(version)
     await update(organization, installInfo)
+    organization.version = installInfo.version
+    await new OrganizationModel(organization).save()
 }
