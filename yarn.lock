@@ -3643,10 +3643,10 @@ expect@^29.0.0, expect@^29.6.2:
     jest-message-util "^29.6.2"
     jest-util "^29.6.2"
 
-express-asyncify@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/express-asyncify/-/express-asyncify-2.1.1.tgz#c72823d8fa4c53131e3a83568c706b05553bf639"
-  integrity sha512-IAUXF3l0PiPbMMsTUw3SrIui4P/uO+i/l8HiIOORgYpF4GjI2DPCBrXBzFFrzehv5euwub3jPcdF80fV4lfnQw==
+express-asyncify@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/express-asyncify/-/express-asyncify-2.1.2.tgz#26fff4bc2ae7ef9ea4f2fb6a0ede8f946a4d5648"
+  integrity sha512-LHtXdJ0Op1K7K/daRMzAIHdYluk6GE3GBX7HlmrltpC1XNu8VwTYQv0U6xHyFCTpe5HAYdbVaGQxQcywTDWZeQ==
 
 express-winston@^4.2.0:
   version "4.2.0"
