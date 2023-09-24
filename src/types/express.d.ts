@@ -1,5 +1,5 @@
 import { Organization } from '@/models'
-import { AddCommandBody, IOrganizationSecret } from '@/types/space'
+import { AddCommandBody, IOrganizationSecret, Profile } from '@/types/space'
 
 declare global {
     namespace Express {
@@ -9,6 +9,7 @@ declare global {
             organization: Organization
             organizationSecret: IOrganizationSecret
             command: AddCommandBody
+            user: Profile
         }
         interface Response {
             meta: {

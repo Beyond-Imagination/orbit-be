@@ -4,7 +4,7 @@ import jwkToPem from 'jwk-to-pem'
 
 import { InvalidClassName, Unauthorized } from '@/types/errors'
 import { OrganizationModel, OrganizationSecret } from '@/models'
-import { getPublicKeys } from '@services/space'
+import { getPublicKeys, getUserProfile } from '@services/space'
 
 export const classNameValidator = (className: string): RequestHandler => {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -135,8 +135,13 @@ async function verifySignature(req: Request, res: Response, next: NextFunction) 
 export const verifySpaceRequest = [setOrganization, verifySignature]
 
 async function verifyUser(req: Request, res: Response, next: NextFunction) {
-    // const token = req.header('Authorization')
-    // TODO: call space api with token to verify if token is valid
+    const token = req.header('Authorization')
+    const secret = req.organizationSecret
+
+    const profile = await getUserProfile(token, secret)
+
+    req.user = profile
+
     next()
 }
 
