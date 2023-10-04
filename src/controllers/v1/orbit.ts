@@ -21,7 +21,7 @@ router.post('/', verifyUserRequest, async (req: Request, res: Response) => {
         organization: req.organization._id,
         clientId: req.organization.clientId,
         authorId: null,
-        channelName: req.body.channel,
+        channelName: req.body.channelName,
         format: req.body.format,
         message: req.body.message,
         cron: req.body.cron,
@@ -40,7 +40,7 @@ router.put('/:id', verifyUserRequest, async (req: Request, res: Response) => {
     const filter = { _id: req.params.id }
     const options = { tz: req.body.timezone }
     const update = {
-        channelName: req.body.channel,
+        channelName: req.body.channelName,
         format: req.body.format,
         message: req.body.message,
         cron: req.body.cron,
