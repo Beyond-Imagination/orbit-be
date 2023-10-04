@@ -23,7 +23,7 @@ export function removeSurroundingDoubleQuote(text: string): string {
 export async function addCommandValidator(req: Request, res: Response, next: NextFunction) {
     const body = req.body as MessagePayload
     let [command, channelName, cron, message, ...rest] = body.message.body.text.match(addRegex) // eslint-disable-line
-    let timezone
+    let timezone, format
 
     channelName = removeSurroundingDoubleQuote(channelName)
     cron = removeSurroundingDoubleQuote(cron)
@@ -44,6 +44,7 @@ export async function addCommandValidator(req: Request, res: Response, next: Nex
         await sendAddFailMessage(req.organization, body.userId)
         return res.sendStatus(204)
     } else {
+        format = 'cron'
         if (cronLength === 6) {
             // has timezone
             const lastSpaceIndex = cron.lastIndexOf(' ')
@@ -74,6 +75,7 @@ export async function addCommandValidator(req: Request, res: Response, next: Nex
     }
 
     req.command = {
+        format,
         channelName,
         cron,
         timezone,
