@@ -7,6 +7,7 @@ import { InvalidOrbitId } from '@/types/errors/orbit'
 import { verifyUserRequest } from '@/middlewares/space'
 import { Orbit, OrbitModel } from '@/models'
 import { sendChannelMessage } from '@/services/space/chats'
+import middlewares from '@middlewares'
 
 const router = asyncify(express.Router())
 
@@ -15,26 +16,32 @@ router.get('/', verifyUserRequest, async (req: Request, res: Response) => {
     res.status(200).json({ orbits: results })
 })
 
-router.post('/', verifyUserRequest, async (req: Request, res: Response) => {
-    // TODO: set middleware to identify orbit message author info
-    await OrbitModel.create({
-        organization: req.organization._id,
-        clientId: req.organization.clientId,
-        authorId: null,
-        channelName: req.body.channelName,
-        format: req.body.format,
-        message: req.body.message,
-        cron: req.body.cron,
-        timezone: req.body.timezone,
-        nextExecutionTime: cronParser
-            .parseExpression(req.body.cron, {
-                tz: req.body.timezone,
-            })
-            .next(),
-    })
+router.post(
+    '/',
+    verifyUserRequest,
+    middlewares.orbit.verifyPostMessage,
+    middlewares.commands.orbitMaxCountLimiter,
+    async (req: Request, res: Response) => {
+        // TODO: set middleware to identify orbit message author info
+        await OrbitModel.create({
+            organization: req.organization._id,
+            clientId: req.organization.clientId,
+            authorId: null,
+            channelName: req.body.channelName,
+            format: req.body.format,
+            message: req.body.message,
+            cron: req.body.cron,
+            timezone: req.body.timezone,
+            nextExecutionTime: cronParser
+                .parseExpression(req.body.cron, {
+                    tz: req.body.timezone,
+                })
+                .next(),
+        })
 
-    res.sendStatus(204)
-})
+        res.sendStatus(204)
+    },
+)
 
 router.put('/:id', verifyUserRequest, async (req: Request, res: Response) => {
     const filter = { _id: req.params.id }
