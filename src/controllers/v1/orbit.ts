@@ -22,11 +22,10 @@ router.post(
     middlewares.orbit.verifyPostMessage,
     middlewares.commands.orbitMaxCountLimiter,
     async (req: Request, res: Response) => {
-        // TODO: set middleware to identify orbit message author info
         await OrbitModel.create({
             organization: req.organization._id,
             clientId: req.organization.clientId,
-            authorId: null,
+            authorId: req.user.id,
             channelName: req.body.channelName,
             format: req.body.format,
             message: req.body.message,
