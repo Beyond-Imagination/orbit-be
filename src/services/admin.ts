@@ -3,28 +3,28 @@ import jwt from 'jsonwebtoken'
 import { v4 } from 'uuid'
 
 import { SECRET_KEY } from '@config'
-import { Organization, OrganizationModel, Admin, AdminModel } from '@/models'
+import { AdminModel, Organization, OrganizationModel } from '@/models'
 import { admin, errors } from '@/types'
 import { revokeToken } from '@utils/blacklist'
 import { getInstallInfo } from '@utils/version'
 import { update } from '@services/space'
 
 export async function register(username: string, password: string, name: string): Promise<void> {
-    return await Admin.saveAdmin(username, password, name)
+    return await AdminModel.saveAdmin(username, password, name)
 }
 
 export async function login(username: string, password: string): Promise<admin.adminLoginResponse> {
     const admin = await AdminModel.findByUsername(username)
     if (!admin) {
-        throw new errors.AdminNotFound()
+        throw new errors.AdminNotFoundException()
     }
 
     if (!bcrypt.compareSync(password, admin.password)) {
-        throw new errors.AuthenticationFailed()
+        throw new errors.AuthenticationFailedException()
     }
 
     if (!admin.hasApproved) {
-        throw new errors.AdminNotPermitted()
+        throw new errors.AdminNotApprovedException()
     }
     AdminModel.updateOne({ _id: admin._id }, { lastLoggedIn: new Date() })
     // 현재는 대칭키 방식으로 암호화된 토큰 발행
@@ -37,6 +37,10 @@ export async function login(username: string, password: string): Promise<admin.a
 
 export function logout(jwt: string): void {
     revokeToken(jwt)
+}
+
+export async function approve(request: admin.adminApproveRequest) {
+    await AdminModel.updateOne({ username: request.username }, { hasApproved: true, approvedAt: new Date() })
 }
 
 export async function versionUpdate(organization: Organization, version: string) {

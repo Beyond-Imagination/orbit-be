@@ -1,4 +1,4 @@
-import { Organization } from '@/models'
+import { Admin, Organization } from '@/models'
 import { AddCommandBody, IOrganizationSecret, Profile } from '@/types/space'
 
 declare global {
@@ -10,6 +10,7 @@ declare global {
             organizationSecret: IOrganizationSecret
             command: AddCommandBody
             user: Profile
+            admin: Admin
         }
         interface Response {
             meta: {

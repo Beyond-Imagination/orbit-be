@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import { BadRequest } from '@types/errors'
-import { PostOrbitRequest } from '@types/orbit'
+import { BadRequest } from '@/types/errors'
+import { PostOrbitRequest } from '@/types/orbit'
 import cronParser from 'cron-parser'
 
 export async function verifyPostMessage(req: Request, res: Response, next: NextFunction) {

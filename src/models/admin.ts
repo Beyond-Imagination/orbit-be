@@ -1,9 +1,10 @@
-import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 import mongoose from 'mongoose'
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 import { getModelForClass, prop, ReturnModelType } from '@typegoose/typegoose'
 import bcrypt from 'bcrypt'
+
 import { SALT_ROUNDS } from '@config'
-import { AlreadyExistedUsername } from '@/types/errors/admin'
+import { AlreadyExistedUsernameException } from '@/types/errors/admin'
 
 export class Admin extends TimeStamps {
     public _id: mongoose.Types.ObjectId
@@ -35,8 +36,11 @@ export class Admin extends TimeStamps {
         try {
             await AdminModel.create({ username: username, password: hashedPassword, name: name })
         } catch (e) {
-            if (e.code === 11000) throw new AlreadyExistedUsername()
-            else throw e
+            if (e.code === 11000) {
+                throw new AlreadyExistedUsernameException()
+            } else {
+                throw e
+            }
         }
     }
     // todo: 추후 approve/reject 사항 반영 시, hasApproved, approvedAt 업데이트 함수 정의

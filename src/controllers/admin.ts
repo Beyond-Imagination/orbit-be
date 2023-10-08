@@ -1,9 +1,16 @@
 import express, { Request, Response } from 'express'
 import asyncify from 'express-asyncify'
 
-import { adminLoginRequest, adminLoginResponse, adminLogoutRequest, adminRegisterRequest, organizationVersionUpdateRequest } from '@/types/admin'
-import { login, logout, register, versionUpdate } from '@services/admin'
-import { setOrganization } from '@/middlewares/space'
+import { approve, login, logout, register, versionUpdate } from '@services/admin'
+import middlewares from '@middlewares'
+import {
+    adminApproveRequest,
+    adminLoginRequest,
+    adminLoginResponse,
+    adminLogoutRequest,
+    adminRegisterRequest,
+    organizationVersionUpdateRequest,
+} from '@/types/admin'
 
 const router = asyncify(express.Router())
 
@@ -25,10 +32,21 @@ router.post('/logout', async (req, res) => {
     res.sendStatus(204)
 })
 
-router.patch('/organization/version', setOrganization, async (req: Request, res: Response) => {
-    const body = req.body as organizationVersionUpdateRequest
-    await versionUpdate(req.organization, body.version)
+router.post('/approve', middlewares.admin.verifyAdminRequest, async (req, res) => {
+    const body = req.body as adminApproveRequest
+    await approve(body)
     res.sendStatus(204)
 })
+
+router.patch(
+    '/organization/version',
+    middlewares.admin.verifyAdminRequest,
+    middlewares.space.setOrganization,
+    async (req: Request, res: Response) => {
+        const body = req.body as organizationVersionUpdateRequest
+        await versionUpdate(req.organization, body.version)
+        res.sendStatus(204)
+    },
+)
 
 export default router
