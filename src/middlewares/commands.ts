@@ -3,9 +3,7 @@ import cronParser from 'cron-parser'
 import moment from 'moment-timezone'
 
 import { MessagePayload } from '@/types/space'
-import { sendAddErrorMessage, sendAddFailMessage } from '@services/space'
-import { Orbit, OrbitModel } from '@/models'
-import { MAX_ORBIT_COUNT } from '@config'
+import { sendAddFailMessage } from '@/services/space'
 
 export const addRegex = /"[^"]+"|\w+/g
 
@@ -82,15 +80,5 @@ export async function addCommandValidator(req: Request, res: Response, next: Nex
         message,
     }
 
-    next()
-}
-
-export async function orbitMaxCountLimiter(req: Request, res: Response, next: NextFunction) {
-    const { userId, clientId } = req.body as MessagePayload
-    const orbitMessages: Orbit[] = await OrbitModel.findByClientId(clientId)
-    if (orbitMessages.length >= MAX_ORBIT_COUNT) {
-        await sendAddErrorMessage(req.organization, userId)
-        return res.sendStatus(422)
-    }
     next()
 }

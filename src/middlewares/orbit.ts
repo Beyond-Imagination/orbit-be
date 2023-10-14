@@ -3,6 +3,22 @@ import { BadRequest } from '@/types/errors'
 import { PostOrbitRequest } from '@/types/orbit'
 import cronParser from 'cron-parser'
 
+import { errors } from '@/types'
+import { Orbit, OrbitModel } from '@/models'
+import { MAX_ORBIT_COUNT } from '@config'
+import { sendAddErrorMessage } from '@services/space'
+
+export async function orbitMaxCountLimiter(req: Request, res: Response, next: NextFunction) {
+    const orbitMessages: Orbit[] = await OrbitModel.findByClientId(req.organization.clientId)
+    if (orbitMessages.length >= MAX_ORBIT_COUNT) {
+        if (req.body.userId) {
+            await sendAddErrorMessage(req.organization, req.body.userId)
+        }
+        return next(new errors.MaxOrbitMessage())
+    }
+    next()
+}
+
 export async function verifyPostMessage(req: Request, res: Response, next: NextFunction) {
     // body에 존재하는 사용자 입력을 필터링, 이 후 검증
     const SUPPORTED_FORMATS = ['cron']

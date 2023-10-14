@@ -7,3 +7,11 @@ export class InvalidOrbitId extends APIError {
         Error.captureStackTrace(this, InvalidOrbitId)
     }
 }
+
+export class MaxOrbitMessage extends APIError {
+    constructor() {
+        super(400, 601, 'max orbit message count')
+        Object.setPrototypeOf(this, MaxOrbitMessage.prototype)
+        Error.captureStackTrace(this, MaxOrbitMessage)
+    }
+}

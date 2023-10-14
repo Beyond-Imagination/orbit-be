@@ -20,7 +20,7 @@ router.post(
     '/',
     verifyUserRequest,
     middlewares.orbit.verifyPostMessage,
-    middlewares.commands.orbitMaxCountLimiter,
+    middlewares.orbit.orbitMaxCountLimiter,
     async (req: Request, res: Response) => {
         await OrbitModel.create({
             organization: req.organization._id,
