@@ -26,8 +26,8 @@ router.post('/login', async (req, res) => {
     res.status(200).json(response)
 })
 
-router.post('/logout', async (req, res) => {
-    const body = req.body as adminLogoutRequest
+router.post('/logout', middlewares.admin.verifyAdminRequest, async (req, res) => {
+    const jwt = req.header('authorization')
     logout(body.jwt)
     res.sendStatus(204)
 })
