@@ -3,14 +3,7 @@ import asyncify from 'express-asyncify'
 
 import { approve, login, logout, register, versionUpdate } from '@services/admin'
 import middlewares from '@middlewares'
-import {
-    adminApproveRequest,
-    adminLoginRequest,
-    adminLoginResponse,
-    adminLogoutRequest,
-    adminRegisterRequest,
-    organizationVersionUpdateRequest,
-} from '@/types/admin'
+import { adminApproveRequest, adminLoginRequest, adminLoginResponse, adminRegisterRequest, organizationVersionUpdateRequest } from '@/types/admin'
 
 const router = asyncify(express.Router())
 
@@ -28,7 +21,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', middlewares.admin.verifyAdminRequest, async (req, res) => {
     const jwt = req.header('authorization')
-    logout(body.jwt)
+    logout(jwt)
     res.sendStatus(204)
 })
 

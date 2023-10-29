@@ -9,10 +9,6 @@ export interface adminLoginRequest {
     password: string
 }
 
-export interface adminLogoutRequest {
-    jwt: string
-}
-
 export interface adminLoginResponse {
     token: string
 }
