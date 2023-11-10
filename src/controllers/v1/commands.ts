@@ -50,6 +50,7 @@ router.post('/orbit', middlewares.commands.addCommandValidator, middlewares.orbi
         timezone: req.command.timezone,
         authorId: body.userId,
         nextExecutionTime: cronParser.parseExpression(req.command.cron, options).next(),
+        status: 'scheduled',
     })
     await chat.sendAddSuccessMessage(req.organization, body.userId)
     res.sendStatus(204)

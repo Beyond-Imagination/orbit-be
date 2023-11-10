@@ -36,6 +36,7 @@ router.post(
                     tz: req.body.timezone,
                 })
                 .next(),
+            status: 'scheduled',
         })
 
         res.sendStatus(204)
@@ -52,6 +53,7 @@ router.put('/:id', verifyUserRequest, async (req: Request, res: Response) => {
         cron: req.body.cron,
         timezone: req.body.timezone,
         nextExecutionTime: cronParser.parseExpression(req.body.cron, options).next().toDate(),
+        status: 'scheduled',
     }
     await OrbitModel.findOneAndUpdate(filter, update)
 
