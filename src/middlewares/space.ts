@@ -4,7 +4,7 @@ import jwkToPem from 'jwk-to-pem'
 
 import { InvalidClassName, Unauthorized } from '@/types/errors'
 import { OrganizationModel, OrganizationSecret } from '@/models'
-import { getPublicKeys, getUserProfile } from '@services/space'
+import { getPublicKeys, getUserProfile, sendInvalidCommandMessage } from '@services/space'
 
 export const classNameValidator = (className: string): RequestHandler => {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -47,7 +47,7 @@ export const classNameRouter = (req: Request, res: Response, next: NextFunction)
     next()
 }
 
-export const messageCommandRouter = (req: Request, res: Response, next: NextFunction) => {
+export const messageCommandRouter = async (req: Request, res: Response, next: NextFunction) => {
     if (req.body.className === 'MessagePayload') {
         const commands = req.body.message.body.text.split(' ')
         switch (commands[0]) {
@@ -63,10 +63,12 @@ export const messageCommandRouter = (req: Request, res: Response, next: NextFunc
                 req.url = '/v1/commands/help'
                 req.method = 'GET'
                 break
-            default:
-                // TODO send invalid command message
+            default: {
+                const organization = await OrganizationModel.findByClientId(req.body.clientId)
+                await sendInvalidCommandMessage(organization, req.body.userId)
                 res.sendStatus(204)
                 return
+            }
         }
         res.meta.path = req.url
         res.meta.method = req.method

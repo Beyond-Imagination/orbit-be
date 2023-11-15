@@ -165,6 +165,10 @@ export async function sendDeleteFailMessage(organization: Organization, userId: 
     await sendTextMessage(organization, userId, 'fail to delete the orbit message')
 }
 
+export async function sendInvalidCommandMessage(organization: Organization, userId: string) {
+    await sendTextMessage(organization, userId, 'not supported command.\n typing `/` will show you available commands')
+}
+
 export async function sendChannelMessage(organization: Organization, channelName: string, text: string) {
     const message: ChatMessage = {
         channel: `channel:name:${channelName}`,
