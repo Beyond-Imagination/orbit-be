@@ -67,6 +67,12 @@ export class Orbit extends TimeStamps {
         return await OrbitModel.updateOne({ _id: this._id }, { nextExecutionTime: next }).exec()
     }
 
+    // 메세지를 보낸 orbit의 status 업데이트
+    public async updateStatus(success: boolean): Promise<UpdateResult> {
+        const status = success ? 'success' : 'fail'
+        return await OrbitModel.updateOne({ _id: this._id }, { status: status })
+    }
+
     // _id 로 삭제
     public static async deleteById(this: ReturnModelType<typeof Orbit>, id: string): Promise<DeleteResult> {
         return this.deleteOne({ _id: id })
