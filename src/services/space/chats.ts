@@ -120,6 +120,11 @@ export async function sendOrbitListMessage(organization: Organization, userId: s
                     },
                     {
                         className: 'MessageField',
+                        first: 'status',
+                        second: orbit.status,
+                    },
+                    {
+                        className: 'MessageField',
                         first: 'created at',
                         second: moment.tz(orbit.createdAt, orbit.timezone).format('YYYY-MM-DD HH:mm:ss'),
                     },
