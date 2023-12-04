@@ -91,6 +91,7 @@ export class Orbit extends TimeStamps {
             nextExecutionTime: this.nextExecutionTime,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
+            status: this.status,
         }
     }
 }
