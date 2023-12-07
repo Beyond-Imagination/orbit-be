@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
-import { JwtPayload, verify } from 'jsonwebtoken'
+import { verify } from 'jsonwebtoken'
 
-import { AdminNotFoundException, InvalidJWTException, AdminNotApprovedException } from '@/types/errors/admin'
+import { AdminNotApprovedException, AdminNotFoundException, InvalidJWTException } from '@/types/errors/admin'
 import { Admin, AdminModel } from '@models/admin'
 import { SECRET_KEY } from '@config'
+import { AdminJWTPayload } from '@types/admin'
 import { checkTokenIsRevoked } from '@utils/blacklist'
 
 export async function jwtVerifyMiddleware(req: Request, res: Response, next: NextFunction) {
@@ -20,7 +21,8 @@ export async function jwtVerifyMiddleware(req: Request, res: Response, next: Nex
         // verify 이전에 'bearer'와 같은 prefix가 제거되어야한다.
         const jsonwebtoken = token.split(' ')[1]
         const decoded = verify(jsonwebtoken, SECRET_KEY)
-        req.jwtPayload = decoded as JwtPayload
+
+        req.jwtPayload = decoded as AdminJWTPayload
     } catch (e) {
         throw new InvalidJWTException(e)
     }

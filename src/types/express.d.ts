@@ -1,5 +1,6 @@
 import { Admin, Organization } from '@/models'
 import { AddCommandBody, IOrganizationSecret, Profile } from '@/types/space'
+import { AdminJWTPayload } from '@/types/admin'
 
 declare global {
     namespace Express {
@@ -11,6 +12,7 @@ declare global {
             command: AddCommandBody
             user: Profile
             admin: Admin
+            jwtPayload: AdminJWTPayload
         }
         interface Response {
             meta: {

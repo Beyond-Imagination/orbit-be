@@ -21,3 +21,7 @@ export interface organizationVersionUpdateRequest {
     serverUrl: string
     version: string
 }
+
+export class AdminJWTPayload {
+    username: string
+}
