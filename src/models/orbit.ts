@@ -70,7 +70,7 @@ export class Orbit extends TimeStamps {
     // 메세지를 보낸 orbit의 status 업데이트
     public async updateStatus(success: boolean): Promise<UpdateResult> {
         const status = success ? 'success' : 'fail'
-        return await OrbitModel.updateOne({ _id: this._id }, { status: status })
+        return await OrbitModel.updateOne({ _id: this._id }, { status: status }).exec()
     }
 
     // _id 로 삭제
