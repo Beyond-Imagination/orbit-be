@@ -3,10 +3,11 @@ import moment from 'moment-timezone'
 
 import { Orbit, Organization } from '@/models'
 import { ChatMessage, MessageDivider, MessageSection } from '@/types/space'
+import { FailSendOrbitMessage } from '@/types/errors'
 import { logger } from '@utils/logger'
 import { MAX_ORBIT_COUNT } from '@config'
 
-async function sendMessage(organization: Organization, message: ChatMessage): Promise<boolean> {
+async function sendMessage(organization: Organization, message: ChatMessage, ignoreError = true): Promise<boolean> {
     const url = `${organization.serverUrl}/api/http/chats/messages/send-message`
     const response = await fetch(url, {
         method: 'POST',
@@ -18,8 +19,12 @@ async function sendMessage(organization: Organization, message: ChatMessage): Pr
         body: JSON.stringify(message),
     })
     if (!response.ok) {
-        logger.error('fail to send message', { serverUrl: organization.serverUrl, cause: await response.text() })
-        return false
+        const cause = await response.json()
+        logger.error('fail to send message', { serverUrl: organization.serverUrl, cause: cause })
+        if (ignoreError) {
+            return false
+        }
+        throw new FailSendOrbitMessage(cause)
     }
     return true
 }
@@ -176,7 +181,7 @@ export async function sendInvalidCommandMessage(organization: Organization, user
     return await sendTextMessage(organization, userId, 'not supported command.\n typing `/` will show you available commands')
 }
 
-export async function sendChannelMessage(organization: Organization, channelName: string, text: string): Promise<boolean> {
+export async function sendChannelMessage(organization: Organization, channelName: string, text: string, ignoreError = true): Promise<boolean> {
     const message: ChatMessage = {
         channel: `channel:name:${channelName}`,
         content: {
@@ -184,5 +189,5 @@ export async function sendChannelMessage(organization: Organization, channelName
             text: text,
         },
     }
-    return await sendMessage(organization, message)
+    return await sendMessage(organization, message, ignoreError)
 }

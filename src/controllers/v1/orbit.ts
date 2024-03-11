@@ -70,7 +70,7 @@ router.delete('/:id', verifyUserRequest, async (req: Request, res: Response) => 
 
 router.post('/:id/send', verifyUserRequest, async (req: Request, res: Response) => {
     const orbit = await OrbitModel.findById(req.params.id)
-    await sendChannelMessage(req.organization, orbit.channelName, orbit.message)
+    await sendChannelMessage(req.organization, orbit.channelName, orbit.message, false)
 
     res.sendStatus(204)
 })

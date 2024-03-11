@@ -15,3 +15,11 @@ export class MaxOrbitMessage extends APIError {
         Error.captureStackTrace(this, MaxOrbitMessage)
     }
 }
+
+export class FailSendOrbitMessage extends APIError {
+    constructor(cause: Error | string = null) {
+        super(500, 610, 'fail send orbit message', cause)
+        Object.setPrototypeOf(this, FailSendOrbitMessage.prototype)
+        Error.captureStackTrace(this, FailSendOrbitMessage)
+    }
+}
