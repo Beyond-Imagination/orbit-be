@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
-import cronParser from 'cron-parser'
-
 import { errors, orbit } from '@/types'
 import { Orbit, OrbitModel } from '@/models'
 import { MAX_ORBIT_COUNT } from '@/config'
 import { sendAddErrorMessage } from '@/services/space'
+import { BadRequest } from '@/types/errors'
+import cronParser from 'cron-parser'
 
 export async function orbitMaxCountLimiter(req: Request, res: Response, next: NextFunction) {
     const orbitMessages: Orbit[] = await OrbitModel.findByClientId(req.organization.clientId)
@@ -19,7 +19,7 @@ export async function orbitMaxCountLimiter(req: Request, res: Response, next: Ne
 
 export async function verifyPostMessage(req: Request, res: Response, next: NextFunction) {
     // body에 존재하는 사용자 입력을 필터링, 이 후 검증
-    const SUPPORTED_FORMATS = ['cron']
+    const SUPPORTED_FORMATS = ['cron', 'weekly']
 
     const body = req.body as orbit.PostOrbitRequest
 
@@ -42,14 +42,23 @@ export async function verifyPostMessage(req: Request, res: Response, next: NextF
         return next(new errors.BadRequest())
     }
 
-    const cronLength = cron?.split(' ').length
-    if (!cron || cronLength !== 5) {
-        return next(new errors.BadRequest())
-    }
-    try {
-        cronParser.parseExpression(cron)
-    } catch (e) {
-        return next(new errors.BadRequest())
+    if (format === 'cron') {
+        const cronLength = cron?.split(' ').length
+        if (!cron || cronLength !== 5) {
+            return next(new BadRequest())
+        }
+        try {
+            cronParser.parseExpression(cron)
+        } catch (e) {
+            return next(new BadRequest())
+        }
+    } else if (format === 'weekly') {
+        if (!body.weekly || !body.weekly.days || !body.weekly.time) {
+            return next(new BadRequest())
+        }
+        if (!body.weekly.days.length) {
+            return next(new BadRequest())
+        }
     }
     next()
 }

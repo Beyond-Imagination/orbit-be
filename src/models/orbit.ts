@@ -31,6 +31,12 @@ export class Orbit extends TimeStamps {
     @prop({ required: true })
     public cron: string
 
+    @prop()
+    public weekly: {
+        days: number[]
+        time: string
+    }
+
     @prop({ default: 'Etc/UTC' })
     public timezone: string
 
@@ -86,6 +92,7 @@ export class Orbit extends TimeStamps {
             format: this.format,
             message: this.message,
             cron: this.cron,
+            weekly: this.weekly,
             timezone: this.timezone,
             authorId: this.authorId,
             nextExecutionTime: this.nextExecutionTime,

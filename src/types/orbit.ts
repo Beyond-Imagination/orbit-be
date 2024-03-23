@@ -3,5 +3,9 @@ export interface PostOrbitRequest {
     format: string
     message: string
     cron: string
+    weekly: {
+        days: number[]
+        time: string
+    }
     timezone: string
 }
