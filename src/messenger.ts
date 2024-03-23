@@ -1,8 +1,8 @@
 import newrelic from 'newrelic'
 
-import { sendChannelMessage } from '@services/space'
+import { sendChannelMessage } from '@/services/space'
 import { Orbit, Organization } from '@/models'
-import { logger } from '@utils/logger'
+import { logger } from '@/utils/logger'
 
 export default class Messenger {
     public async handler(orbit: Orbit) {

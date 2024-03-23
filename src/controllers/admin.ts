@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express'
 import asyncify from 'express-asyncify'
 
-import { approve, login, logout, register, versionUpdate } from '@services/admin'
-import middlewares from '@middlewares'
+import { approve, login, logout, register, versionUpdate } from '@/services/admin'
+import middlewares from '@/middlewares'
 import { adminApproveRequest, adminLoginRequest, adminLoginResponse, adminRegisterRequest, organizationVersionUpdateRequest } from '@/types/admin'
 
 const router = asyncify(express.Router())

@@ -2,10 +2,10 @@ import express, { NextFunction, Request, Response } from 'express'
 import asyncify from 'express-asyncify'
 import cronParser from 'cron-parser'
 
-import middlewares from '@middlewares'
+import middlewares from '@/middlewares'
 import { space } from '@/types'
 import { OrbitModel } from '@/models'
-import * as chat from '@services/space/chats'
+import * as chat from '@/services/space/chats'
 
 const router = asyncify(express.Router())
 

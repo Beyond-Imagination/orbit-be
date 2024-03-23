@@ -3,7 +3,7 @@ import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 import { getModelForClass, prop, ReturnModelType } from '@typegoose/typegoose'
 import bcrypt from 'bcrypt'
 
-import { SALT_ROUNDS } from '@config'
+import { SALT_ROUNDS } from '@/config'
 import { AlreadyExistedUsernameException } from '@/types/errors/admin'
 
 export class Admin extends TimeStamps {

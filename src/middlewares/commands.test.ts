@@ -2,7 +2,7 @@ import { getMockReq, getMockRes } from '@jest-mock/express'
 
 import { addCommandValidator, addRegex } from '@/middlewares/commands'
 
-jest.mock('@services/space', () => ({
+jest.mock('@/services/space', () => ({
     sendAddFailMessage: jest.fn(),
 }))
 

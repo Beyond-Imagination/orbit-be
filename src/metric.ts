@@ -2,7 +2,7 @@ import newrelic from 'newrelic'
 import schedule from 'node-schedule'
 
 import { OrbitModel, OrganizationModel } from '@/models'
-import { logger } from '@utils/logger'
+import { logger } from '@/utils/logger'
 
 export default class Metric {
     private async orbitCount() {

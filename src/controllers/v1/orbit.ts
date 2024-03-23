@@ -4,21 +4,20 @@ import cronParser from 'cron-parser'
 import { DeleteResult } from 'mongodb'
 
 import { InvalidOrbitId } from '@/types/errors/orbit'
-import { verifyUserRequest } from '@/middlewares/space'
 import { Orbit, OrbitModel } from '@/models'
 import { sendChannelMessage } from '@/services/space/chats'
-import middlewares from '@middlewares'
+import middlewares from '@/middlewares'
 
 const router = asyncify(express.Router())
 
-router.get('/', verifyUserRequest, async (req: Request, res: Response) => {
+router.get('/', middlewares.space.verifyUserRequest, async (req: Request, res: Response) => {
     const results: Orbit[] = await OrbitModel.findByClientId(req.organization.clientId)
     res.status(200).json({ orbits: results })
 })
 
 router.post(
     '/',
-    verifyUserRequest,
+    middlewares.space.verifyUserRequest,
     middlewares.orbit.verifyPostMessage,
     middlewares.orbit.orbitMaxCountLimiter,
     async (req: Request, res: Response) => {
@@ -43,7 +42,7 @@ router.post(
     },
 )
 
-router.put('/:id', verifyUserRequest, async (req: Request, res: Response) => {
+router.put('/:id', middlewares.space.verifyUserRequest, async (req: Request, res: Response) => {
     const filter = { _id: req.params.id }
     const options = { tz: req.body.timezone }
     const update = {
@@ -60,7 +59,7 @@ router.put('/:id', verifyUserRequest, async (req: Request, res: Response) => {
     res.sendStatus(204)
 })
 
-router.delete('/:id', verifyUserRequest, async (req: Request, res: Response) => {
+router.delete('/:id', middlewares.space.verifyUserRequest, async (req: Request, res: Response) => {
     const deleteResult: DeleteResult = await OrbitModel.deleteById(req.params.id)
     if (deleteResult.deletedCount === 0) {
         throw new InvalidOrbitId()
@@ -68,7 +67,7 @@ router.delete('/:id', verifyUserRequest, async (req: Request, res: Response) => 
     res.sendStatus(204)
 })
 
-router.post('/:id/send', verifyUserRequest, async (req: Request, res: Response) => {
+router.post('/:id/send', middlewares.space.verifyUserRequest, async (req: Request, res: Response) => {
     const orbit = await OrbitModel.findById(req.params.id)
     await sendChannelMessage(req.organization, orbit.channelName, orbit.message, false)
 

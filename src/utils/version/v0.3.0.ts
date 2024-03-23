@@ -1,7 +1,7 @@
 import { installInfo } from '@/types'
-import { CLIENT_URL } from '@config'
+import { CLIENT_URL } from '@/config'
 
-import v010 from '@utils/version/v0.1.0'
+import v010 from '@/utils/version/v0.1.0'
 
 const data: installInfo = {
     version: '0.3.0',

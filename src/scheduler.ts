@@ -4,8 +4,8 @@ import newrelic from 'newrelic'
 
 import Messenger from '@/messenger'
 import { OrbitModel } from '@/models'
-import { MESSENGER_CONCURRENCY } from '@config'
-import { logger } from '@utils/logger'
+import { MESSENGER_CONCURRENCY } from '@/config'
+import { logger } from '@/utils/logger'
 
 export default class Scheduler {
     queue: queueAsPromised

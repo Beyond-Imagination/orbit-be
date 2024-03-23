@@ -21,15 +21,7 @@
         "importHelpers": true,
         "baseUrl": "src",
         "paths": {
-            "@/*": ["*"],
-            "@config": ["config"],
-            "@types/*": ["types/*"],
-            "@controllers": ["controllers"],
-            "@exceptions/*": ["exceptions/*"],
-            "@middlewares": ["middlewares"],
-            "@models/*": ["models/*"],
-            "@services/*": ["services/*"],
-            "@utils/*": ["utils/*"]
+            "@/*": ["*"]
         }
     },
     "include": ["src/**/*.ts", "src/**/*.json", ".env"],

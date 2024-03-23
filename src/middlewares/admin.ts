@@ -2,10 +2,10 @@ import { NextFunction, Request, Response } from 'express'
 import { verify } from 'jsonwebtoken'
 
 import { AdminNotApprovedException, AdminNotFoundException, InvalidJWTException } from '@/types/errors/admin'
-import { Admin, AdminModel } from '@models/admin'
-import { SECRET_KEY } from '@config'
-import { AdminJWTPayload } from '@types/admin'
-import { checkTokenIsRevoked } from '@utils/blacklist'
+import { AdminJWTPayload } from '@/types/admin'
+import { Admin, AdminModel } from '@/models'
+import { SECRET_KEY } from '@/config'
+import { checkTokenIsRevoked } from '@/utils/blacklist'
 
 export async function jwtVerifyMiddleware(req: Request, res: Response, next: NextFunction) {
     try {

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
-import { logger } from '@utils/logger'
-import { DB_URI, DB_NAME } from '@config'
+
+import { logger } from '@/utils/logger'
+import { DB_URI, DB_NAME } from '@/config'
 
 export async function connect() {
     await mongoose.connect(DB_URI, { dbName: DB_NAME })

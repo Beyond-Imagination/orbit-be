@@ -1,4 +1,4 @@
-import { getAccessToken, getPublicKeys } from '@services/space/application'
+import { getAccessToken, getPublicKeys } from '@/services/space/application'
 import { Unauthorized } from '@/types/errors'
 import { OrganizationSecret } from '@/models'
 

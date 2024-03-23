@@ -1,4 +1,4 @@
-import { checkTokenIsRevoked, revokeToken } from '@utils/blacklist'
+import { checkTokenIsRevoked, revokeToken } from '@/utils/blacklist'
 
 jest.setTimeout(30000)
 

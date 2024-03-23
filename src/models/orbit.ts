@@ -5,7 +5,7 @@ import { getModelForClass, plugin, prop, Ref, ReturnModelType } from '@typegoose
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 import cronParser from 'cron-parser'
 
-import { Organization } from '@models/organization'
+import { Organization } from '@/models/organization'
 
 @plugin(mongoosePaginate)
 export class Orbit extends TimeStamps {

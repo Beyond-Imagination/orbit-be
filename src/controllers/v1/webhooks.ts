@@ -2,10 +2,10 @@ import express from 'express'
 import asyncify from 'express-asyncify'
 
 import { ApplicationUninstalledPayload, ChangeServerUrlPayload, InitPayload } from '@/types/space'
-import middlewares from '@middlewares'
+import middlewares from '@/middlewares'
 import { OrganizationModel } from '@/models'
-import { install } from '@services/space'
-import { getInstallInfo } from '@utils/version'
+import { install } from '@/services/space'
+import { getInstallInfo } from '@/utils/version'
 
 const router = asyncify(express.Router())
 

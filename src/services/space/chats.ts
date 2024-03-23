@@ -4,8 +4,8 @@ import moment from 'moment-timezone'
 import { Orbit, Organization } from '@/models'
 import { ChatMessage, MessageDivider, MessageSection } from '@/types/space'
 import { FailSendOrbitMessage } from '@/types/errors'
-import { logger } from '@utils/logger'
-import { MAX_ORBIT_COUNT } from '@config'
+import { logger } from '@/utils/logger'
+import { MAX_ORBIT_COUNT } from '@/config'
 
 async function sendMessage(organization: Organization, message: ChatMessage, ignoreError = true): Promise<boolean> {
     const url = `${organization.serverUrl}/api/http/chats/messages/send-message`

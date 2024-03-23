@@ -1,11 +1,11 @@
-import '@config'
+import '@/config'
 import newrelic from 'newrelic'
-import * as db from '@models/connector'
+import * as db from '@/models/connector'
 import API from '@/api'
 import Messenger from '@/messenger'
 import Scheduler from '@/scheduler'
 import Metric from '@/metric'
-import { logger } from '@utils/logger'
+import { logger } from '@/utils/logger'
 ;(async () => {
     await db.connect()
     const api = new API(newrelic)

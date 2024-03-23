@@ -2,12 +2,12 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { v4 } from 'uuid'
 
-import { SECRET_KEY } from '@config'
+import { SECRET_KEY } from '@/config'
 import { AdminModel, Organization, OrganizationModel } from '@/models'
 import { admin, errors } from '@/types'
-import { revokeToken } from '@utils/blacklist'
-import { getInstallInfo } from '@utils/version'
-import { update } from '@services/space'
+import { revokeToken } from '@/utils/blacklist'
+import { getInstallInfo } from '@/utils/version'
+import { update } from '@/services/space'
 
 export async function register(username: string, password: string, name: string): Promise<void> {
     return await AdminModel.saveAdmin(username, password, name)

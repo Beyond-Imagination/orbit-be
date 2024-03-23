@@ -1,9 +1,9 @@
-import { getInstallInfo } from '@utils/version'
+import { getInstallInfo } from '@/utils/version'
 import { errors } from '@/types'
 
-import v010 from '@utils/version/v0.1.0'
-import v030 from '@utils/version/v0.3.0'
-import v040 from '@utils/version/v0.4.0'
+import v010 from '@/utils/version/v0.1.0'
+import v030 from '@/utils/version/v0.3.0'
+import v040 from '@/utils/version/v0.4.0'
 
 describe('space install version', () => {
     it('should get v0.1.0', () => {

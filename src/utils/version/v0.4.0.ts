@@ -1,6 +1,6 @@
 import { installInfo } from '@/types'
 
-import v030 from '@utils/version/v0.3.0'
+import v030 from '@/utils/version/v0.3.0'
 
 const data: installInfo = {
     version: '0.4.0',

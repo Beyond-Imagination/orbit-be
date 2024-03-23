@@ -6,10 +6,10 @@ import helmet from 'helmet'
 import cors from 'cors'
 import asyncify from 'express-asyncify'
 
-import { isProduction, NODE_ENV, PORT } from '@config'
-import { logger, loggerMiddleware } from '@utils/logger'
-import controllers from '@controllers'
-import middlewares from '@middlewares'
+import { isProduction, NODE_ENV, PORT } from '@/config'
+import { logger, loggerMiddleware } from '@/utils/logger'
+import controllers from '@/controllers'
+import middlewares from '@/middlewares'
 
 export default class API {
     app: express.Application
