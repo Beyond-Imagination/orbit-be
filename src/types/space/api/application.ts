@@ -17,3 +17,9 @@ export interface AccessToken {
 export interface PublicKeys {
     keys: RSA[]
 }
+
+export interface Application {
+    id: string
+    name: string
+    clientId: string
+}

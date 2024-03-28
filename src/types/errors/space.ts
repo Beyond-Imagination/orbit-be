@@ -23,3 +23,11 @@ export class ErrorRequestRights extends APIError {
         Error.captureStackTrace(this, ErrorRequestRights)
     }
 }
+
+export class ErrorGetApplication extends APIError {
+    constructor(cause: Error | string = null) {
+        super(500, 712, 'fail to get application information', cause)
+        Object.setPrototypeOf(this, ErrorGetApplication.prototype)
+        Error.captureStackTrace(this, ErrorGetApplication)
+    }
+}

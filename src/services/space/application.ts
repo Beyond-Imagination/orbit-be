@@ -1,8 +1,8 @@
 import fetch from 'node-fetch'
 import { LRUCache } from 'lru-cache'
 
-import { AccessToken, IOrganizationSecret, PublicKeys } from '@/types/space'
-import { Unauthorized } from '@/types/errors'
+import { AccessToken, Application, IOrganizationSecret, PublicKeys } from '@/types/space'
+import { ErrorGetApplication, Unauthorized } from '@/types/errors'
 
 const accessTokenCache: LRUCache<string, string> = new LRUCache<string, string>({
     max: 100,
@@ -57,4 +57,20 @@ export async function getPublicKeys(secret: IOrganizationSecret, token: string):
         throw new Unauthorized(await response.text())
     }
     return JSON.parse(await response.json()) as PublicKeys
+}
+
+export async function getApplication(secret: IOrganizationSecret): Promise<Application> {
+    const url = `${secret.serverUrl}/api/http/applications/me`
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            Authorization: await secret.getBearerToken(),
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    })
+    if (!response.ok) {
+        throw new ErrorGetApplication(await response.text())
+    }
+    return await response.json()
 }

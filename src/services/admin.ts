@@ -6,8 +6,8 @@ import { SECRET_KEY } from '@/config'
 import { AdminModel, Organization, OrganizationModel } from '@/models'
 import { admin, errors } from '@/types'
 import { revokeToken } from '@/utils/blacklist'
-import { getInstallInfo } from '@/utils/version'
-import { update } from '@/services/space'
+import { getInstallInfo, gettingStartedUrl } from '@/utils/version'
+import { getApplication, update } from '@/services/space'
 
 export async function register(username: string, password: string, name: string): Promise<void> {
     return await AdminModel.saveAdmin(username, password, name)
@@ -45,6 +45,13 @@ export async function approve(request: admin.adminApproveRequest) {
 
 export async function versionUpdate(organization: Organization, version: string) {
     const installInfo = getInstallInfo(version)
+    const application = await getApplication(organization)
+    installInfo.uiExtension.extensions.forEach((extension, index) => {
+        if (extension.className === 'GettingStartedUiExtensionIn') {
+            extension.gettingStartedUrl = gettingStartedUrl(organization.serverUrl, application.name, application.id)
+            installInfo.uiExtension.extensions[index] = extension
+        }
+    })
     await update(organization, installInfo)
     organization.version = installInfo.version
     await new OrganizationModel(organization).save()
