@@ -51,6 +51,7 @@ router.put('/:id', middlewares.space.verifyUserRequest, async (req: Request, res
         format: req.body.format,
         message: req.body.message,
         cron: req.body.cron,
+        weekly: req.body.weekly,
         timezone: req.body.timezone,
         nextExecutionTime: cronParser.parseExpression(req.body.cron, options).next().toDate(),
         status: 'scheduled',
