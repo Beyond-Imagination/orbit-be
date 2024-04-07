@@ -1,25 +1,20 @@
 import fetch from 'node-fetch'
 
-import { Organization } from '@/models'
 import { errors, installInfo, space } from '@/types'
 
-export async function install(organization: Organization | space.IOrganizationSecret, installInfo: installInfo) {
-    await Promise.all([setUIExtension(organization, installInfo), requestRights(organization, installInfo)])
+export async function sync(secret: space.IOrganizationSecret, installInfo: installInfo) {
+    await Promise.all([setUIExtension(secret, installInfo), requestRights(secret, installInfo)])
 }
 
-export async function update(organization: Organization, installInfo: installInfo) {
-    await Promise.all([setUIExtension(organization, installInfo), requestRights(organization, installInfo)])
-}
-
-async function setUIExtension(organization: Organization | space.IOrganizationSecret, installInfo: installInfo): Promise<void> {
-    const url = `${organization.serverUrl}/api/http/applications/ui-extensions`
+async function setUIExtension(secret: space.IOrganizationSecret, installInfo: installInfo): Promise<void> {
+    const url = `${secret.serverUrl}/api/http/applications/ui-extensions`
     const body = JSON.stringify(installInfo.uiExtension)
     const response = await fetch(url, {
         method: 'PATCH',
         headers: {
             'content-type': 'application/json',
             Accept: 'application/json',
-            Authorization: await organization.getBearerToken(),
+            Authorization: await secret.getBearerToken(),
         },
         body: body,
     })
@@ -29,15 +24,15 @@ async function setUIExtension(organization: Organization | space.IOrganizationSe
     return
 }
 
-async function requestRights(organization: Organization | space.IOrganizationSecret, installInfo: installInfo): Promise<void> {
-    const url = `${organization.serverUrl}/api/http/applications/clientId:${organization.clientId}/authorizations/authorized-rights/request-rights`
+async function requestRights(secret: space.IOrganizationSecret, installInfo: installInfo): Promise<void> {
+    const url = `${secret.serverUrl}/api/http/applications/clientId:${secret.clientId}/authorizations/authorized-rights/request-rights`
     const body = JSON.stringify(installInfo.right)
     const response = await fetch(url, {
         method: 'PATCH',
         headers: {
             'content-type': 'application/json',
             Accept: 'application/json',
-            Authorization: await organization.getBearerToken(),
+            Authorization: await secret.getBearerToken(),
         },
         body: body,
     })

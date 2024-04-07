@@ -7,7 +7,7 @@ import { AdminModel, Organization, OrganizationModel } from '@/models'
 import { admin, errors } from '@/types'
 import { revokeToken } from '@/utils/blacklist'
 import { getInstallInfo, gettingStartedUrl } from '@/utils/version'
-import { getApplication, update } from '@/services/space'
+import { getApplication, sync } from '@/services/space'
 
 export async function register(username: string, password: string, name: string): Promise<void> {
     return await AdminModel.saveAdmin(username, password, name)
@@ -52,7 +52,7 @@ export async function versionUpdate(organization: Organization, version: string)
             installInfo.uiExtension.extensions[index] = extension
         }
     })
-    await update(organization, installInfo)
+    await sync(organization, installInfo)
     organization.version = installInfo.version
     await new OrganizationModel(organization).save()
 }
