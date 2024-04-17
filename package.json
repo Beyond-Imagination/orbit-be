@@ -10,7 +10,8 @@
         "build": "rm -rf dist && swc src -d dist --source-maps --copy-files",
         "lint": "eslint --ignore-path .gitignore --ext .ts src/",
         "lint:fix": "yarn lint -- --fix",
-        "postinstall": "husky install"
+        "postinstall": "husky install",
+        "reviewer": "cross-env NODE_ENV=development node -r @swc-node/register src/scripts/reviewers.ts"
     },
     "dependencies": {
         "@typegoose/typegoose": "^11.2.0",

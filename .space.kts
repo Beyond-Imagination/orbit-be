@@ -10,14 +10,29 @@ job("[BE] Merge Request") {
         }
     }
 
-    container(displayName = "build & test", image = "node:alpine") {
-        shellScript {
-            content = """
-                set -e
-                yarn install
-                yarn build
-                yarn test
-            """
+    parallel {
+        container(displayName = "build & test", image = "node:alpine") {
+            shellScript {
+                content = """
+                    set -e
+                    yarn install
+                    yarn build
+                    yarn test
+                """
+            }
+        }
+
+        container(displayName = "add reviewer", image = "node:alpine") {
+            env["REVIEW_ID"] = "{{ run:review.id }}"
+            env["PROJECT_ID"] = "{{ run:project.id }}"
+            env["SPACE_AUTOMATION_AUTHORIZATION"] = "{{ project:SPACE_AUTOMATION_AUTHORIZATION }}"
+            shellScript {
+                content = """
+                    set -e
+                    yarn install
+                    yarn reviewer
+                """
+            }
         }
     }
 }
