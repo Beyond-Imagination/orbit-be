@@ -26,7 +26,7 @@ router.post(
             clientId: req.organization.clientId,
             authorId: req.user.id,
             channelName: req.body.channelName,
-            format: req.body.format,
+            type: req.body.type,
             message: req.body.message,
             cron: req.body.cron,
             weekly: req.body.weekly,
@@ -48,7 +48,7 @@ router.put('/:id', middlewares.space.verifyUserRequest, async (req: Request, res
     const options = { tz: req.body.timezone }
     const update = {
         channelName: req.body.channelName,
-        format: req.body.format,
+        type: req.body.type,
         message: req.body.message,
         cron: req.body.cron,
         weekly: req.body.weekly,
