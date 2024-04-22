@@ -1,6 +1,6 @@
 import newrelic from 'newrelic'
 
-import { sendChannelMessage } from '@/services/space'
+import { sendChannelMessage } from '@/libs/space'
 import { Orbit, Organization } from '@/models'
 import { logger } from '@/utils/logger'
 

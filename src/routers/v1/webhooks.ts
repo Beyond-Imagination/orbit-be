@@ -4,7 +4,7 @@ import asyncify from 'express-asyncify'
 import { ApplicationUninstalledPayload, ChangeServerUrlPayload, InitPayload } from '@/types/space'
 import middlewares from '@/middlewares'
 import { OrganizationModel } from '@/models'
-import { getApplication, sync } from '@/services/space'
+import { getApplication, sync } from '@/libs/space'
 import { getInstallInfo, gettingStartedUrl } from '@/utils/version'
 
 const router = asyncify(express.Router())

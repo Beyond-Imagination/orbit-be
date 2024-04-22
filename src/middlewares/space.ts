@@ -4,7 +4,7 @@ import jwkToPem from 'jwk-to-pem'
 
 import { InvalidClassName, Unauthorized } from '@/types/errors'
 import { OrganizationModel, OrganizationSecret } from '@/models'
-import { getPublicKeys, getUserProfile, sendInvalidCommandMessage } from '@/services/space'
+import { getPublicKeys, getUserProfile, sendInvalidCommandMessage } from '@/libs/space'
 
 export const classNameValidator = (className: string): RequestHandler => {
     return (req: Request, res: Response, next: NextFunction) => {

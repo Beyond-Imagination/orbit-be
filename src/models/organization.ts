@@ -5,7 +5,7 @@ import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 
 import { OrganizationNotFoundException } from '@/types/errors'
 import { IOrganizationSecret } from '@/types/space'
-import { getBearerToken } from '@/services/space'
+import { getBearerToken } from '@/libs/space'
 
 export class OrganizationSecret implements IOrganizationSecret {
     clientId: string

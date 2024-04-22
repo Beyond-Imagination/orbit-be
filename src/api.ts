@@ -8,7 +8,7 @@ import asyncify from 'express-asyncify'
 
 import { isProduction, NODE_ENV, PORT } from '@/config'
 import { logger, loggerMiddleware } from '@/utils/logger'
-import controllers from '@/controllers'
+import routers from '@/routers'
 import middlewares from '@/middlewares'
 
 export default class API {
@@ -40,12 +40,12 @@ export default class API {
     }
 
     setController() {
-        this.app.use('/v1/webhooks', controllers.v1.webhooks)
-        this.app.use('/v1/commands', controllers.v1.commands)
-        this.app.use('/v1/orbits', controllers.v1.orbit)
-        this.app.use('/admin', controllers.admin)
+        this.app.use('/v1/webhooks', routers.v1.webhooks)
+        this.app.use('/v1/commands', routers.v1.commands)
+        this.app.use('/v1/orbits', routers.v1.orbit)
+        this.app.use('/admin', routers.admin)
         if (!isProduction()) {
-            this.app.use('/dev', controllers.dev)
+            this.app.use('/dev', routers.dev)
         }
     }
 

@@ -3,7 +3,7 @@ import cronParser from 'cron-parser'
 import moment from 'moment-timezone'
 
 import { MessagePayload } from '@/types/space'
-import { sendAddFailMessage } from '@/services/space'
+import { sendAddFailMessage } from '@/libs/space'
 
 export const addRegex = /"[^"]+"|\w+/g
 

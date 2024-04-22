@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
 
-import { GetTeam, AddReviewParticipant } from '@/services/space'
+import { GetTeam, AddReviewParticipant } from '@/libs/space'
 import { OrganizationSecret } from '@/models'
 import { logger } from '@/utils/logger'
 ;(async () => {

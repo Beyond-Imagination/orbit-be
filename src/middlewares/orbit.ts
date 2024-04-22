@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { errors, orbit } from '@/types'
 import { Orbit, OrbitModel } from '@/models'
 import { MAX_ORBIT_COUNT } from '@/config'
-import { sendAddErrorMessage } from '@/services/space'
+import { sendAddErrorMessage } from '@/libs/space'
 import { BadRequest } from '@/types/errors'
 import cronParser from 'cron-parser'
 
