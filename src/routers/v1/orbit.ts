@@ -5,7 +5,7 @@ import { DeleteResult } from 'mongodb'
 
 import { InvalidOrbitId } from '@/types/errors/orbit'
 import { Orbit, OrbitModel } from '@/models'
-import { sendChannelMessage } from '@/services/space/chats'
+import { sendChannelMessage } from '@/libs/space/chats'
 import middlewares from '@/middlewares'
 
 const router = asyncify(express.Router())
