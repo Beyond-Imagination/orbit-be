@@ -140,9 +140,7 @@ async function verifyUser(req: Request, res: Response, next: NextFunction) {
     const token = req.header('Authorization')
     const secret = req.organizationSecret
 
-    const profile = await getUserProfile(token, secret)
-
-    req.user = profile
+    req.user = await getUserProfile(token, secret)
 
     next()
 }
