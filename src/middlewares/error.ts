@@ -1,10 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
 
-import { APIError } from '@/types/errors'
+import { APIError, InternalServerError } from '@/types/errors'
 import { logger } from '@/utils/logger'
 
 const errorMiddleware = (error: APIError, req: Request, res: Response, next: NextFunction) => {
     try {
+        if (!error.isOrbitError) {
+            error = new InternalServerError(error)
+        }
         res.meta.error = error
         res.status(error.statusCode).json({ message: error.message, code: error.errorCode, cause: error.cause })
     } catch (err) {

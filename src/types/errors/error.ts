@@ -3,6 +3,7 @@ export class APIError extends Error {
     errorCode: number
     message: string
     cause: Error | string
+    isOrbitError: boolean
 
     constructor(statusCode: number, errorCode: number, message: string, cause: Error | string = null) {
         super(message)
@@ -11,6 +12,7 @@ export class APIError extends Error {
         this.errorCode = errorCode
         this.message = message
         this.cause = cause
+        this.isOrbitError = true
     }
 
     toJSON() {

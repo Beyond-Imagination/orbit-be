@@ -5,7 +5,6 @@ import { errors, orbit } from '@/types'
 import { Orbit, OrbitModel } from '@/models'
 import { MAX_ORBIT_COUNT } from '@/config'
 import { sendAddErrorMessage } from '@/libs/space'
-import { BadRequest } from '@/types/errors'
 
 export async function orbitMaxCountLimiter(req: Request, res: Response, next: NextFunction) {
     const orbitMessages: Orbit[] = await OrbitModel.findByClientId(req.organization.clientId)
@@ -46,19 +45,19 @@ export async function verifyPostMessage(req: Request, res: Response, next: NextF
     if (format === 'cron') {
         const cronLength = cron?.split(' ').length
         if (!cron || cronLength !== 5) {
-            return next(new BadRequest())
+            return next(new errors.BadRequest())
         }
         try {
             cronParser.parseExpression(cron)
         } catch (e) {
-            return next(new BadRequest())
+            return next(new errors.BadRequest())
         }
     } else if (format === 'weekly') {
         if (!body.weekly || !body.weekly.days || !body.weekly.time) {
-            return next(new BadRequest())
+            return next(new errors.BadRequest())
         }
         if (!body.weekly.days.length) {
-            return next(new BadRequest())
+            return next(new errors.BadRequest())
         }
     }
     next()
