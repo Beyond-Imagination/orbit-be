@@ -23,7 +23,7 @@ export async function verifyPostMessage(req: Request, res: Response, next: NextF
 
     const body = req.body as orbit.PostOrbitRequest
 
-    const { channelName, format, message, cron, timezone } = body
+    const { channelName, type, message, cron, timezone } = body
 
     if (!message) {
         return next(new errors.BadRequest())
@@ -38,11 +38,11 @@ export async function verifyPostMessage(req: Request, res: Response, next: NextF
         return next(new errors.BadRequest())
     }
 
-    if (!format || !SUPPORTED_FORMATS.includes(format)) {
+    if (!type || !SUPPORTED_FORMATS.includes(type)) {
         return next(new errors.BadRequest())
     }
 
-    if (format === 'cron') {
+    if (type === 'cron') {
         const cronLength = cron?.split(' ').length
         if (!cron || cronLength !== 5) {
             return next(new errors.BadRequest())
@@ -52,7 +52,7 @@ export async function verifyPostMessage(req: Request, res: Response, next: NextF
         } catch (e) {
             return next(new errors.BadRequest())
         }
-    } else if (format === 'weekly') {
+    } else if (type === 'weekly') {
         if (!body.weekly || !body.weekly.days || !body.weekly.time) {
             return next(new errors.BadRequest())
         }

@@ -1,6 +1,6 @@
 export interface PostOrbitRequest {
     channelName: string
-    format: string
+    type: string
     message: string
     cron: string
     weekly: {
