@@ -57,6 +57,10 @@ export class Orbit extends TimeStamps {
         return await this.find({ clientId }).exec()
     }
 
+    public static async getCountByClientId(this: ReturnModelType<typeof Orbit>, clientId: string): Promise<number> {
+        return await this.count({ clientId }).exec()
+    }
+
     // nextExecutionTime 이 현재시간보다 과거인 애들 read
     public static async findByExecutionTime(
         this: ReturnModelType<typeof Orbit>,

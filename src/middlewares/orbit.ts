@@ -2,13 +2,13 @@ import { NextFunction, Request, Response } from 'express'
 import cronParser from 'cron-parser'
 
 import { errors, orbit } from '@/types'
-import { Orbit, OrbitModel } from '@/models'
+import { OrbitModel } from '@/models'
 import { MAX_ORBIT_COUNT } from '@/config'
 import { sendAddErrorMessage } from '@/libs/space'
 
 export async function orbitMaxCountLimiter(req: Request, res: Response, next: NextFunction) {
-    const orbitMessages: Orbit[] = await OrbitModel.findByClientId(req.organization.clientId)
-    if (orbitMessages.length >= MAX_ORBIT_COUNT) {
+    const count = await OrbitModel.getCountByClientId(req.organization.clientId)
+    if (count >= MAX_ORBIT_COUNT) {
         if (req.body.userId) {
             await sendAddErrorMessage(req.organization, req.body.userId)
         }
