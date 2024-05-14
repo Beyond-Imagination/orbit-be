@@ -6,7 +6,7 @@ export async function sync(secret: space.IOrganizationSecret, installInfo: insta
     await Promise.all([setUIExtension(secret, installInfo), requestRights(secret, installInfo)])
 }
 
-async function setUIExtension(secret: space.IOrganizationSecret, installInfo: installInfo): Promise<void> {
+export async function setUIExtension(secret: space.IOrganizationSecret, installInfo: installInfo): Promise<void> {
     const url = `${secret.serverUrl}/api/http/applications/ui-extensions`
     const body = JSON.stringify(installInfo.uiExtension)
     const response = await fetch(url, {
@@ -24,7 +24,7 @@ async function setUIExtension(secret: space.IOrganizationSecret, installInfo: in
     return
 }
 
-async function requestRights(secret: space.IOrganizationSecret, installInfo: installInfo): Promise<void> {
+export async function requestRights(secret: space.IOrganizationSecret, installInfo: installInfo): Promise<void> {
     const url = `${secret.serverUrl}/api/http/applications/clientId:${secret.clientId}/authorizations/authorized-rights/request-rights`
     const body = JSON.stringify(installInfo.right)
     const response = await fetch(url, {

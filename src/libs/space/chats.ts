@@ -1,18 +1,18 @@
 import fetch from 'node-fetch'
 import moment from 'moment-timezone'
 
-import { Orbit, Organization } from '@/models'
+import { Orbit, OrganizationSecret } from '@/models'
 import { ChatMessage, MessageDivider, MessageSection } from '@/types/space'
 import { FailSendOrbitMessage } from '@/types/errors'
 import { logger } from '@/utils/logger'
 import { MAX_ORBIT_COUNT } from '@/config'
 
-async function sendMessage(organization: Organization, message: ChatMessage, ignoreError = true): Promise<boolean> {
-    const url = `${organization.serverUrl}/api/http/chats/messages/send-message`
+async function sendMessage(secret: OrganizationSecret, message: ChatMessage, ignoreError = true): Promise<boolean> {
+    const url = `${secret.serverUrl}/api/http/chats/messages/send-message`
     const response = await fetch(url, {
         method: 'POST',
         headers: {
-            Authorization: await organization.getBearerToken(),
+            Authorization: await secret.getBearerToken(),
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
@@ -20,7 +20,7 @@ async function sendMessage(organization: Organization, message: ChatMessage, ign
     })
     if (!response.ok) {
         const cause = await response.json()
-        logger.error('fail to send message', { serverUrl: organization.serverUrl, cause: cause })
+        logger.error('fail to send message', { serverUrl: secret.serverUrl, cause: cause })
         if (ignoreError) {
             return false
         }
@@ -29,7 +29,7 @@ async function sendMessage(organization: Organization, message: ChatMessage, ign
     return true
 }
 
-export async function sendTextMessage(organization: Organization, userId: string, text: string): Promise<boolean> {
+export async function sendTextMessage(secret: OrganizationSecret, userId: string, text: string): Promise<boolean> {
     const message: ChatMessage = {
         channel: `member:id:${userId}`,
         content: {
@@ -37,10 +37,10 @@ export async function sendTextMessage(organization: Organization, userId: string
             text: text,
         },
     }
-    return await sendMessage(organization, message)
+    return await sendMessage(secret, message)
 }
 
-export async function sendHelpMessage(organization: Organization, userId: string): Promise<boolean> {
+export async function sendHelpMessage(secret: OrganizationSecret, userId: string): Promise<boolean> {
     const message: ChatMessage = {
         channel: `member:id:${userId}`,
         content: {
@@ -79,26 +79,26 @@ export async function sendHelpMessage(organization: Organization, userId: string
             ],
         },
     }
-    return await sendMessage(organization, message)
+    return await sendMessage(secret, message)
 }
 
-export async function sendAddSuccessMessage(organization: Organization, userId: string): Promise<boolean> {
-    return await sendTextMessage(organization, userId, 'a new orbit message added')
+export async function sendAddSuccessMessage(secret: OrganizationSecret, userId: string): Promise<boolean> {
+    return await sendTextMessage(secret, userId, 'a new orbit message added')
 }
 
-export async function sendAddFailMessage(organization: Organization, userId: string): Promise<boolean> {
-    return await sendTextMessage(organization, userId, 'fail to add a new orbit message. check your command')
+export async function sendAddFailMessage(secret: OrganizationSecret, userId: string): Promise<boolean> {
+    return await sendTextMessage(secret, userId, 'fail to add a new orbit message. check your command')
 }
 
-export async function sendAddErrorMessage(organization: Organization, userId: string): Promise<boolean> {
+export async function sendAddErrorMessage(secret: OrganizationSecret, userId: string): Promise<boolean> {
     return await sendTextMessage(
-        organization,
+        secret,
         userId,
         `fail to add a new orbit message. Only up to ${MAX_ORBIT_COUNT} messages can be registered per organization.`,
     )
 }
 
-export async function sendOrbitListMessage(organization: Organization, userId: string, orbits: Orbit[]): Promise<boolean> {
+export async function sendOrbitListMessage(secret: OrganizationSecret, userId: string, orbits: Orbit[]): Promise<boolean> {
     const sections = orbits.map<MessageSection | MessageDivider>(orbit => ({
         className: 'MessageSection',
         elements: [
@@ -162,26 +162,26 @@ export async function sendOrbitListMessage(organization: Organization, userId: s
             sections: sections,
         },
     }
-    return await sendMessage(organization, message)
+    return await sendMessage(secret, message)
 }
 
-export async function sendEmptyOrbitListMessage(organization: Organization, userId: string): Promise<boolean> {
-    return await sendTextMessage(organization, userId, 'no orbit message')
+export async function sendEmptyOrbitListMessage(secret: OrganizationSecret, userId: string): Promise<boolean> {
+    return await sendTextMessage(secret, userId, 'no orbit message')
 }
 
-export async function sendDeleteSuccessMessage(organization: Organization, userId: string): Promise<boolean> {
-    return await sendTextMessage(organization, userId, 'the orbit message deleted')
+export async function sendDeleteSuccessMessage(secret: OrganizationSecret, userId: string): Promise<boolean> {
+    return await sendTextMessage(secret, userId, 'the orbit message deleted')
 }
 
-export async function sendDeleteFailMessage(organization: Organization, userId: string): Promise<boolean> {
-    return await sendTextMessage(organization, userId, 'fail to delete the orbit message')
+export async function sendDeleteFailMessage(secret: OrganizationSecret, userId: string): Promise<boolean> {
+    return await sendTextMessage(secret, userId, 'fail to delete the orbit message')
 }
 
-export async function sendInvalidCommandMessage(organization: Organization, userId: string): Promise<boolean> {
-    return await sendTextMessage(organization, userId, 'not supported command.\n typing `/` will show you available commands')
+export async function sendInvalidCommandMessage(secret: OrganizationSecret, userId: string): Promise<boolean> {
+    return await sendTextMessage(secret, userId, 'not supported command.\n typing `/` will show you available commands')
 }
 
-export async function sendChannelMessage(organization: Organization, channelName: string, text: string, ignoreError = true): Promise<boolean> {
+export async function sendChannelMessage(secret: OrganizationSecret, channelName: string, text: string, ignoreError = true): Promise<boolean> {
     const message: ChatMessage = {
         channel: `channel:name:${channelName}`,
         content: {
@@ -189,5 +189,5 @@ export async function sendChannelMessage(organization: Organization, channelName
             text: text,
         },
     }
-    return await sendMessage(organization, message, ignoreError)
+    return await sendMessage(secret, message, ignoreError)
 }
