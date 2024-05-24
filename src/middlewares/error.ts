@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import { APIError, InternalServerError } from '@/types/errors'
 import { logger } from '@/utils/logger'
 
-const errorMiddleware = (error: APIError, req: Request, res: Response, next: NextFunction) => {
+export const errorMiddleware = (error: APIError, req: Request, res: Response, next: NextFunction) => {
     try {
         if (!error.isOrbitError) {
             error = new InternalServerError(error)
@@ -15,5 +15,3 @@ const errorMiddleware = (error: APIError, req: Request, res: Response, next: Nex
         res.status(500).json({ message: 'internal server error' })
     }
 }
-
-export default errorMiddleware

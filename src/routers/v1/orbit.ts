@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import express, { Request, Response, Router } from 'express'
 import asyncify from 'express-asyncify'
 import cronParser from 'cron-parser'
 import { DeleteResult } from 'mongodb'
@@ -6,9 +6,9 @@ import { DeleteResult } from 'mongodb'
 import { InvalidOrbitId } from '@/types/errors/orbit'
 import { Orbit, OrbitModel } from '@/models'
 import { sendChannelMessage } from '@/libs/space/chats'
-import middlewares from '@/middlewares'
+import * as middlewares from '@/middlewares'
 
-const router = asyncify(express.Router())
+const router: Router = asyncify(express.Router())
 
 router.get('/', middlewares.space.verifyUserRequest, async (req: Request, res: Response) => {
     const results: Orbit[] = await OrbitModel.findByClientId(req.organization.clientId)

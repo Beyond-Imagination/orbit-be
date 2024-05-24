@@ -1,11 +1,11 @@
-import express, { Request, Response } from 'express'
+import express, { Request, Response, Router } from 'express'
 import asyncify from 'express-asyncify'
 
 import { approve, login, logout, register, versionUpdate } from '@/services/admin'
-import middlewares from '@/middlewares'
+import * as middlewares from '@/middlewares'
 import { adminApproveRequest, adminLoginRequest, adminLoginResponse, adminRegisterRequest, organizationVersionUpdateRequest } from '@/types/admin'
 
-const router = asyncify(express.Router())
+const router: Router = asyncify(express.Router())
 
 router.post('/register', async (req, res) => {
     const body = req.body as adminRegisterRequest

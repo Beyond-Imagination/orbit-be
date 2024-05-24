@@ -1,6 +1,6 @@
 import { getMockReq, getMockRes } from '@jest-mock/express'
 
-import errorMiddleware from '@/middlewares/error'
+import { errorMiddleware } from '@/middlewares/error'
 import { InternalServerError } from '@/types/errors'
 
 describe('errorMiddleware', () => {

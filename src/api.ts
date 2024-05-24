@@ -9,7 +9,7 @@ import asyncify from 'express-asyncify'
 import { isProduction, NODE_ENV, PORT } from '@/config'
 import { logger, loggerMiddleware } from '@/utils/logger'
 import routers from '@/routers'
-import middlewares from '@/middlewares'
+import * as middlewares from '@/middlewares'
 
 export default class API {
     app: express.Application
@@ -50,7 +50,7 @@ export default class API {
     }
 
     setPostMiddleware() {
-        this.app.use(middlewares.error)
+        this.app.use(middlewares.error.errorMiddleware)
     }
 
     public listen() {

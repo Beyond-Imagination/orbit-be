@@ -1,13 +1,13 @@
-import express from 'express'
+import express, { Router } from 'express'
 import asyncify from 'express-asyncify'
 
 import { ApplicationUninstalledPayload, ChangeServerUrlPayload, InitPayload } from '@/types/space'
-import middlewares from '@/middlewares'
+import * as middlewares from '@/middlewares'
 import { OrganizationModel } from '@/models'
 import { getApplication, sync } from '@/libs/space'
 import { getInstallInfo, gettingStartedUrl } from '@/utils/version'
 
-const router = asyncify(express.Router())
+const router: Router = asyncify(express.Router())
 
 router.use(middlewares.space.verifySpaceRequest)
 

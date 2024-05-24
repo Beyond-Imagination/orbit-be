@@ -1,10 +1,10 @@
-import express from 'express'
+import express, { Router } from 'express'
 import asyncify from 'express-asyncify'
 
 import { InternalServerError } from '@/types/errors'
 import { OrbitModel } from '@/models'
 
-const router = asyncify(express.Router())
+const router: Router = asyncify(express.Router())
 
 router.get('/error', async (req, res) => {
     throw new InternalServerError()

@@ -1,13 +1,13 @@
-import express, { NextFunction, Request, Response } from 'express'
+import express, { NextFunction, Request, Response, Router } from 'express'
 import asyncify from 'express-asyncify'
 import cronParser from 'cron-parser'
 
-import middlewares from '@/middlewares'
+import * as middlewares from '@/middlewares'
 import { space } from '@/types'
 import { OrbitModel } from '@/models'
 import * as chat from '@/libs/space/chats'
 
-const router = asyncify(express.Router())
+const router: Router = asyncify(express.Router())
 
 router.use(middlewares.space.verifySpaceRequest)
 

@@ -1,15 +1,6 @@
-import error from './error'
-import * as space from './space'
-import * as request from './request'
-import * as commands from './commands'
-import * as admin from './admin'
-import * as orbit from './orbit'
-
-export default {
-    error,
-    space,
-    request,
-    commands,
-    admin,
-    orbit,
-}
+export * as error from './error'
+export * as space from './space'
+export * as request from './request'
+export * as commands from './commands'
+export * as admin from './admin'
+export * as orbit from './orbit'
