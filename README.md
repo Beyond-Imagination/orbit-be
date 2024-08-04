@@ -3,9 +3,54 @@ orbit 은 space marketplace app 으로 space 에 예약메시지 기능을 추�
 
 ## prerequisites
 * node.js 18.16
-* yarn
+* pnpm
+
+
+## Architecture
+````mermaid
+flowchart LR
+    user((user))
+
+    subgraph space
+        direction LR
+        space1(Organization A)
+        space2(Organization B)
+        space3(Organization C)
+    end
+
+    subgraph orbit
+        direction TB
+	    subgraph aws-lightsail
+	        direction TB
+			subgraph Orbit-BE
+				direction TB
+			    api(api)
+				scheduler(scheduler)
+				queue{{queue}}
+				messenger(messenger)
+
+				scheduler -- 메시지 push --> queue
+				queue -- 메시지 pull --> messenger
+			end
+	    end
+
+	    subgraph mongodb atlas
+	        db[(mongodb)]
+	    end
+    end
+
+    user --> space
+    space -- 예약 메시지 등록 & 조회 --> api
+    api --> db
+	scheduler -- message 전송 시간 참조 --> db
+	messenger -- chat message 전송 --> space
+	messenger -- 다음 전송 시간 update --> db
+```
+````
+
 
 ## 디렉토리 구조
+
 * `/src/middlewares`
   * Express.js의 middleware들이 정의되어 있습니다.
 
@@ -58,6 +103,6 @@ cp .env.template .env
 ## Getting Started
 
 ```shell
-yarn install
-yarn dev
+pnpm install
+pnpm dev
 ```
