@@ -20,11 +20,10 @@ export default class Scheduler {
             const now = new Date()
             let page = 1
             while (page) {
-                const orbits = await OrbitModel.findByExecutionTime(page, now)
+                const orbits = await OrbitModel.findScheduledOrbits(page, now)
                 for (const orbit of orbits.docs) {
                     this.queue.push(orbit)
                 }
-
                 page = orbits.nextPage
             }
         })
@@ -36,6 +35,15 @@ export default class Scheduler {
                 await this.publish()
             } catch (e) {
                 logger.error('scheduler fail', { error: e })
+            }
+        })
+
+        // 매일 00:00분에 error log를 clear하는 작업이 수행됨
+        schedule.scheduleJob('0 0 * * *', async () => {
+            try {
+                await OrbitModel.updateMany({}, { $set: { errorTimes: [] } })
+            } catch (e) {
+                logger.error('fail to clear resend orbit error logs', { error: e })
             }
         })
     }

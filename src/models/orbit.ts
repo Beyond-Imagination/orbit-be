@@ -6,6 +6,7 @@ import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
 import cronParser from 'cron-parser'
 
 import { Organization } from '@/models/organization'
+import { MESSAGE_RESEND_THRESHOLD } from '@/config'
 
 @plugin(mongoosePaginate)
 export class Orbit extends TimeStamps {
@@ -49,6 +50,9 @@ export class Orbit extends TimeStamps {
     @prop({ default: 'scheduled' })
     public status: string
 
+    @prop()
+    public errorTimes: Date[]
+
     public static async findById(this: ReturnModelType<typeof Orbit>, id: string): Promise<Orbit> {
         return await this.findOne({ _id: id }).exec()
     }
@@ -70,6 +74,19 @@ export class Orbit extends TimeStamps {
         return await this.paginate({ nextExecutionTime: { $lte: executionTime } }, { limit: 200, page: page, populate: 'organization' })
     }
 
+    // 메세지 큐에 들어가는 orbit들을 식별
+    public static async findScheduledOrbits(
+        this: ReturnModelType<typeof Orbit>,
+        page: number,
+        executionTime: Date = new Date(),
+    ): Promise<mongoose.PaginateResult<mongoose.PaginateDocument<typeof Orbit, object, { limit: number }>>> {
+        const query = {
+            nextExecutionTime: { $lte: executionTime },
+            $expr: { $lte: [{ $size: '$errorTimes' }, MESSAGE_RESEND_THRESHOLD] },
+        }
+        return await this.paginate(query, { limit: 200, page: page, populate: 'organization' })
+    }
+
     // 현재 object 의 nextExecutionTime 업데이트
     public async updateNextExecutionTime(): Promise<UpdateResult> {
         const options = { tz: this.timezone }
@@ -80,6 +97,15 @@ export class Orbit extends TimeStamps {
     // 메세지를 보낸 orbit의 status 업데이트
     public async updateStatus(success: boolean): Promise<UpdateResult> {
         const status = success ? 'success' : 'fail'
+        if (status === 'fail') {
+            return await OrbitModel.updateOne(
+                { _id: this._id },
+                {
+                    status,
+                    errorTimes: [...this.errorTimes, Date.now()],
+                },
+            ).exec()
+        }
         return await OrbitModel.updateOne({ _id: this._id }, { status: status }).exec()
     }
 
