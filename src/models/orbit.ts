@@ -65,15 +65,6 @@ export class Orbit extends TimeStamps {
         return await this.count({ clientId }).exec()
     }
 
-    // nextExecutionTime 이 현재시간보다 과거인 애들 read
-    public static async findByExecutionTime(
-        this: ReturnModelType<typeof Orbit>,
-        page: number,
-        executionTime: Date = new Date(),
-    ): Promise<mongoose.PaginateResult<mongoose.PaginateDocument<typeof Orbit, object, { limit: number }>>> {
-        return await this.paginate({ nextExecutionTime: { $lte: executionTime } }, { limit: 200, page: page, populate: 'organization' })
-    }
-
     // 메세지 큐에 들어가는 orbit들을 식별
     public static async findScheduledOrbits(
         this: ReturnModelType<typeof Orbit>,
